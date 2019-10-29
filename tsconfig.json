@@ -7,6 +7,8 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
@@ -17,7 +19,12 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@credentials/*": ["src/app/credentials/*.json"],
+      "@services/*": ["src/app/services/*.service"],
+      "@models/*": ["src/app/models/*.model"]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
