@@ -6,6 +6,57 @@
   flex-direction: column;
   width: rem(375px);
   min-width: rem(375px);
+  max-width: rem(375px);
   height: 100%;
-  background-color: map-get($palette, color-accent);
+  background: map-get($palette, color-experimental);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  padding: rem(30px);
+  box-sizing: border-box;
+  &.loading {
+    align-items: center;
+    justify-content: center;
+  }
+  .category-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    .category-title {
+      font-size: rem(28px);
+      margin-top: rem(20px);
+      margin-bottom: rem(10px);
+      color: map-get($palette, color-gray-transparent);
+      text-transform: uppercase;
+      text-overflow: ellipsis;
+      overflow-x: hidden;
+      white-space: nowrap;
+    }
+    .classification {
+      width: 100%;
+      padding: rem(10px) rem(20px);
+      box-sizing: border-box;
+      font-size: rem(20px);
+      color: map-get($palette, color-gray-lighter);
+      text-transform: uppercase;
+      text-overflow: ellipsis;
+      overflow-x: hidden;
+      white-space: nowrap;
+      border-radius: rem(3px);
+      background-color: transparent;
+      transition: background-color .2s ease-in-out;
+      cursor: pointer;
+      &:hover {
+        background-color: map-get($palette, color-gray-light-transparent);
+      }
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
 }

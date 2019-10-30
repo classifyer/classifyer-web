@@ -1,1 +1,13 @@
-<p>menu works!</p>
+<div class="container" [ngClass]="{ loading: loading }">
+  <lottie-animation-view *ngIf="loading" [options]="lottieConfig" width="50" height="50">
+  </lottie-animation-view>
+  <ng-template [ngIf]="! loading">
+    <div @fadeInOut class="category-container" *ngFor="let category of categories">
+      <span class="category-title">{{ category.name }}</span>
+      <span class="classification"
+      *ngFor="let dictionary of getDictionariesOfCategory(category.id)"
+      [ngClass]="{ active: activeDictionary === dictionary.id }"
+      (click)="activateDictionary(dictionary.id)">{{ dictionary.name }}</span>
+    </div>
+  </ng-template>
+</div>
