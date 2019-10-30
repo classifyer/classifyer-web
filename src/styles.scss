@@ -1,8 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'colors';
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
 html,
 body {
   height: 100%;
   width: 100%;
   display: flex;
+  flex-direction: column;
   margin: 0;
+  background-color: map-get($palette, color-gray-light);
+  font-family: 'Roboto', sans-serif;
 }

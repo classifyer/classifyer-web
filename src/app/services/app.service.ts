@@ -180,6 +180,14 @@ export class AppService {
 
   }
 
+  public async parsePlainLiterals(input: string) {
+
+    const parser = this.worker.wrap(new Worker('../workers/parser.worker', { type: 'module' }));
+
+    return await parser.send({ csv: false, input: input }).toPromise<ParseResult>();
+
+  }
+
 }
 
 export interface CategoryDoc {

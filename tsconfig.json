@@ -23,7 +23,8 @@
     "paths": {
       "@credentials/*": ["src/app/credentials/*.json"],
       "@services/*": ["src/app/services/*.service"],
-      "@models/*": ["src/app/models/*.model"]
+      "@models/*": ["src/app/models/*.model"],
+      "@components": ["src/app/components"]
     }
   },
   "angularCompilerOptions": {

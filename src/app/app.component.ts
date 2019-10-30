@@ -37,21 +37,6 @@ export class AppComponent implements OnInit {
 
       this.dictionaries = this.app.dictionaries;
 
-      // let sub: Subscription;
-      //
-      // sub = this.app.match(licr, 'islam,Truth Seeker', true)
-      // .subscribe(value => {
-      //
-      //   console.log(value);
-      //   if ( value.state === MatchingState.Finished ) {
-      //
-      //     sub.unsubscribe();
-      //     console.log(sub.closed);
-      //
-      //   }
-      //
-      // });
-
     });
 
   }
@@ -99,18 +84,41 @@ export class AppComponent implements OnInit {
 
     let sub: Subscription;
 
-    sub = this.app.match(this.dictionaries[+form.value.dictionary], this.userInput.result, this.userInput.time, false, this.headers[+form.value.header])
-    .subscribe(progress => {
+    // sub = this.app.match(this.dictionaries[+form.value.dictionary], this.userInput.result, this.userInput.time, false, this.headers[+form.value.header])
+    // .subscribe(progress => {
+    //
+    //   console.log(progress);
+    //
+    //   if ( progress.state === MatchingState.Finished ) {
+    //
+    //     sub.unsubscribe();
+    //
+    //   }
+    //
+    // });
 
-      console.log(progress);
+    this.app.parsePlainLiterals('Islam\nAtheist')
+    .then(result => {
 
-      if ( progress.state === MatchingState.Finished ) {
+      this.userInput = result;
 
-        sub.unsubscribe();
+      console.log(this.userInput);
 
-      }
+      sub = this.app.match(this.dictionaries[+form.value.dictionary], this.userInput.result, this.userInput.time, true)
+      .subscribe(progress => {
 
-    });
+        console.log(progress);
+
+        if ( progress.state === MatchingState.Finished ) {
+
+          sub.unsubscribe();
+
+        }
+
+      });
+
+    })
+    .catch(console.error);
 
   }
 

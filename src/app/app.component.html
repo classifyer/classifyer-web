@@ -1,14 +1,5 @@
-<div style="display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;">
-  <form #f="ngForm" (ngSubmit)="onFormSubmit(f)">
-    <select name="dictionary" ngModel required>
-      <option *ngFor="let dictionary of dictionaries; index as index" [value]="index">{{ dictionary.name }} ({{ dictionary.language }})</option>
-    </select>
-    <label for="csvFile" class="csv-file-button">Select CSV File</label>
-    <input #csvInput (change)="onCSVChanged()" type="file" accept=".csv, text/csv" id="csvFile" name="file" ngModel required>
-    <select name="header" ngModel required>
-      <option *ngFor="let header of headers; index as index" [value]="index">{{ header }}</option>
-    </select>
-    <button type="submit">Submit</button>
-  </form>
+<app-header></app-header>
+<div class="main-container">
+  <app-menu></app-menu>
+  <router-outlet></router-outlet>
 </div>
-<router-outlet></router-outlet>

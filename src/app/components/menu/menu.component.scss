@@ -1,0 +1,11 @@
+@import '../../../colors';
+@import '../../../util';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  width: rem(375px);
+  min-width: rem(375px);
+  height: 100%;
+  background-color: map-get($palette, color-accent);
+}
