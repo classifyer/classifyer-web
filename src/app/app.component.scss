@@ -1,3 +1,5 @@
+@import '../util';
+
 :host {
   display: flex;
   flex-direction: column;
@@ -7,5 +9,5 @@
 
 .main-container {
   display: flex;
-  height: 100%;
+  height: calc(100% - #{rem(90px)});
 }

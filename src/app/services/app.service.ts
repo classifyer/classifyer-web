@@ -19,10 +19,12 @@ export class AppService {
   private static readonly FILES_COLLECTION: string = 'files';
   private _categories: CategoryDoc[] = [];
   private _dictionaries: DictionaryDoc[] = [];
-  private dataAvailable: boolean = false;
+  private _dataAvailable: boolean = false;
+  private _matchingInProgress: boolean = false;
+  private _selectedDictionary: string = null;
 
   /** Emits when the data has changed due to updates or authentication changes. The boolean value indicates the data availability. */
-  public onDataChange: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.dataAvailable);
+  public onDataChange: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._dataAvailable);
 
   constructor(
     private firebase: FirebaseService,
@@ -65,8 +67,8 @@ export class AppService {
 
           });
 
-          this.dataAvailable = true;
-          this.onDataChange.next(this.dataAvailable);
+          this._dataAvailable = true;
+          this.onDataChange.next(this._dataAvailable);
 
         })
         .catch(error => {
@@ -75,8 +77,8 @@ export class AppService {
 
           this._categories = [];
           this._dictionaries = [];
-          this.dataAvailable = false;
-          this.onDataChange.next(this.dataAvailable);
+          this._dataAvailable = false;
+          this.onDataChange.next(this._dataAvailable);
 
         });
 
@@ -86,8 +88,8 @@ export class AppService {
 
         this._categories = [];
         this._dictionaries = [];
-        this.dataAvailable = false;
-        this.onDataChange.next(this.dataAvailable);
+        this._dataAvailable = false;
+        this.onDataChange.next(this._dataAvailable);
 
       }
 
@@ -96,6 +98,8 @@ export class AppService {
   }
 
   private async _match(dictionary: DictionaryDoc, input: any[], listener: BehaviorSubject<MatchMessage>, parsingTime: number, quickMatch: boolean = false, targetHeader?: string) {
+
+    this._matchingInProgress = true;
 
     listener.next({ state: MatchingState.Downloading, message: 'Downloading the classification dictionary...' });
 
@@ -128,6 +132,7 @@ export class AppService {
 
         listener.error(data.error);
         matcher.terminate();
+        this._matchingInProgress = false;
 
       }
       // Normal message
@@ -142,6 +147,7 @@ export class AppService {
 
         listener.complete();
         matcher.terminate();
+        this._matchingInProgress = false;
 
       }
 
@@ -149,18 +155,32 @@ export class AppService {
 
   }
 
+  /**
+  * Returns the last cached categories.
+  */
   public get categories(): CategoryDoc[] {
 
     return _.cloneDeep(this._categories);
 
   }
 
+  /**
+  * Returns the last cached dictionaries.
+  */
   public get dictionaries(): DictionaryDoc[] {
 
     return _.cloneDeep(this._dictionaries);
 
   }
 
+  /**
+  * Starts the matching process. Returns a BehaviorSubject emitting MatchMessage objects which can be used to track the progress and retrieve the end result.
+  * @param dictionary The dictionary document.
+  * @param input The parsed input.
+  * @param parsingTime The parsing time indicated by the parser.
+  * @param quickMatch Indicates if the input is a list of string literals and not a CSV file.
+  * @param targetHeader The column that should be used as literals when input is a CSV file.
+  */
   public match(dictionary: DictionaryDoc, input: any[], parsingTime: number, quickMatch: boolean = false, targetHeader?: string): BehaviorSubject<MatchMessage> {
 
     const listener = new BehaviorSubject<MatchMessage>({ state: MatchingState.Started, message: 'Matching your data...' });
@@ -172,6 +192,10 @@ export class AppService {
 
   }
 
+  /**
+  * Parses the string input as a CSV file.
+  * @param input The CSV file content as string.
+  */
   public async parseCSV(input: string) {
 
     const parser = this.worker.wrap(new Worker('../workers/parser.worker', { type: 'module' }));
@@ -180,11 +204,34 @@ export class AppService {
 
   }
 
+  /**
+  * Parses a newline-delimited list of string literals.
+  * @param input The list of string literals.
+  */
   public async parsePlainLiterals(input: string) {
 
     const parser = this.worker.wrap(new Worker('../workers/parser.worker', { type: 'module' }));
 
     return await parser.send({ csv: false, input: input }).toPromise<ParseResult>();
+
+  }
+
+  /**
+  * Marks a dictionary as selected if matching is not in progress.
+  * @param id The dictionary ID.
+  */
+  public selectDictionary(id: string) {
+
+    if ( ! this._matchingInProgress ) this._selectedDictionary = id;
+
+  }
+
+  /**
+  * Returns the current selected dictionary ID or null if none.
+  */
+  public get selectedDictionary(): string {
+
+    return this._selectedDictionary;
 
   }
 

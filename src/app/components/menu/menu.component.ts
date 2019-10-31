@@ -51,7 +51,8 @@ export class MenuComponent implements OnInit {
 
   public activateDictionary(id: string) {
 
-    this.activeDictionary = id;
+    this.app.selectDictionary(id);
+    this.activeDictionary = this.app.selectedDictionary;
 
   }
 

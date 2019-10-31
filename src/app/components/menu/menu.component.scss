@@ -1,6 +1,21 @@
 @import '../../../colors';
 @import '../../../util';
 
+::-webkit-scrollbar {
+  width: rem(5px);
+}
+
+::-webkit-scrollbar-track {
+  background: map-get($palette, color-gray-light-transparent);
+}
+
+::-webkit-scrollbar-thumb {
+  background: map-get($palette, color-gray-lighter-transparent);
+  &:hover {
+    background: map-get($palette, color-gray-lightest-transparent);
+  }
+}
+
 :host {
   display: flex;
   flex-direction: column;
@@ -11,6 +26,15 @@
   background: map-get($palette, color-experimental);
 }
 
+// Container bottom padding fix for overflow-y
+@-moz-document url-prefix() {
+  .container::after {
+    content: '';
+    padding-top: rem(30px);
+    display: block;
+  }
+}
+
 .container {
   display: flex;
   flex-direction: column;
@@ -18,6 +42,9 @@
   width: 100%;
   padding: rem(30px);
   box-sizing: border-box;
+  overflow-y: auto;
+  scrollbar-color: map-get($palette, color-gray-lighter-transparent) map-get($palette, color-gray-light-transparent);
+  scrollbar-width: thin;
   &.loading {
     align-items: center;
     justify-content: center;
