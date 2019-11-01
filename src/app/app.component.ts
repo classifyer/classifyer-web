@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { AppService, DictionaryDoc } from '@services/app';
-import { Subscription } from 'rxjs';
-import { MatchingState, ParseResult } from '@models/common'
 import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { AppService, DictionaryDoc } from '@services/app';
+import { MatchingState, ParseResult } from '@models/common'
+import { PromptComponent } from '@components';
 import _ from 'lodash';
 
 @Component({
@@ -19,6 +20,8 @@ export class AppComponent implements OnInit {
   public dictionaries: DictionaryDoc[] = [];
   public headers: string[] = [];
 
+  @ViewChild(PromptComponent, { static: false })
+  private prompt: PromptComponent;
   private userInput: ParseResult = null;
 
   constructor(
@@ -36,6 +39,13 @@ export class AppComponent implements OnInit {
       if ( ! available ) return;
 
       this.dictionaries = this.app.dictionaries;
+
+    });
+
+    this.app.onPromptStateChanged.subscribe(state => {
+
+      if ( this.prompt ) this.prompt.setState(state);
+      else if ( state.id !== null ) console.error('Could not set state', state, 'because prompt is', this.prompt);
 
     });
 

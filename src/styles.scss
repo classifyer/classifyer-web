@@ -1,3 +1,4 @@
+@import 'util';
 @import 'colors';
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
@@ -8,6 +9,50 @@ body {
   display: flex;
   flex-direction: column;
   margin: 0;
-  background-color: map-get($palette, color-gray-light);
+  background-color: map-get($palette, color-gray-lighter);
   font-family: 'Roboto', sans-serif;
+}
+
+.btn-group {
+  width: 100%;
+  display: flex;
+  & > *:not(:last-child) {
+    margin-right: rem(15px);
+  }
+}
+
+button.btn {
+  padding: rem(15px) rem(25px);
+  text-align: center;
+  text-transform: uppercase;
+  border-radius: rem(3px);
+  border: none;
+  cursor: pointer;
+  font-size: rem(18px);
+  transition: background-color .2s ease-in-out;
+  outline: none;
+  &.btn-primary {
+    background-color: map-get($palette, color-accent);
+    color: map-get($palette, color-gray-lightest);
+    &:hover {
+      background-color: map-get($palette, color-accent-light);
+    }
+  }
+  &.btn-secondary {
+    background-color: map-get($palette, color-gray-medium-light);
+    color: map-get($palette, color-gray-darkest);
+    &:hover {
+      background-color: map-get($palette, color-gray-light);
+    }
+  }
+  &.btn-danger {
+    background-color: map-get($palette, color-danger);
+    color: map-get($palette, color-gray-lightest);
+    &:hover {
+      background-color: map-get($palette, color-danger-light);
+    }
+  }
+  &.btn-block {
+    width: 100%;
+  }
 }

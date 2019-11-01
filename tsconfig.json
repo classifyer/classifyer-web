@@ -24,7 +24,8 @@
       "@credentials/*": ["src/app/credentials/*.json"],
       "@services/*": ["src/app/services/*.service"],
       "@models/*": ["src/app/models/*.model"],
-      "@components": ["src/app/components"]
+      "@components": ["src/app/components"],
+      "@guards/*": ["src/app/guards/*.guard"]
     }
   },
   "angularCompilerOptions": {

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { FirebaseService } from './firebase.service';
 import { WorkerService } from './worker.service';
 import { MatchMessage, MatchingState, ParseResult } from '@models/common';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import _ from 'lodash';
 
 @Injectable({
@@ -21,10 +21,15 @@ export class AppService {
   private _dictionaries: DictionaryDoc[] = [];
   private _dataAvailable: boolean = false;
   private _matchingInProgress: boolean = false;
+  private _cancelMatching: boolean = false;
   private _selectedDictionary: string = null;
 
   /** Emits when the data has changed due to updates or authentication changes. The boolean value indicates the data availability. */
   public onDataChange: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._dataAvailable);
+  /** Emits when prompt state (visibility) changes. */
+  public onPromptStateChanged: BehaviorSubject<PromptMessage> = new BehaviorSubject<PromptMessage>({ id: null, visible: false, message: null, title: null });
+  /** Used for responding back with an activated prompt. */
+  public onPromptResponse: Subject<PromptResponse> = new Subject<PromptResponse>();
 
   constructor(
     private firebase: FirebaseService,
@@ -99,6 +104,16 @@ export class AppService {
 
   private async _match(dictionary: DictionaryDoc, input: any[], listener: BehaviorSubject<MatchMessage>, parsingTime: number, quickMatch: boolean = false, targetHeader?: string) {
 
+    // Check for cancellation
+    if ( this._cancelMatching ) {
+
+      console.log('Matching cancelled!');
+      this._cancelMatching = false;
+      this._matchingInProgress = false;
+      return;
+
+    }
+
     this._matchingInProgress = true;
 
     listener.next({ state: MatchingState.Downloading, message: 'Downloading the classification dictionary...' });
@@ -111,6 +126,16 @@ export class AppService {
     const mappingsCompressed = await this.http.get(mappingsFileUrl, { responseType: 'arraybuffer' }).toPromise();
 
     let downloadTimeEnd: number = performance.now();
+
+    // Check for cancellation
+    if ( this._cancelMatching ) {
+
+      console.log('Matching cancelled!');
+      this._cancelMatching = false;
+      this._matchingInProgress = false;
+      return;
+
+    }
 
     // Create web worker
     const matcher = this.worker.wrap(new Worker('../workers/matcher.worker', { type: 'module' }));
@@ -126,6 +151,17 @@ export class AppService {
       targetHeader: targetHeader
     })
     .listen<MatchMessage>(data => {
+
+      // Check for cancellation
+      if ( this._cancelMatching ) {
+
+        console.log('Matching cancelled!');
+        matcher.terminate();
+        this._cancelMatching = false;
+        this._matchingInProgress = false;
+        return;
+
+      }
 
       // Error message
       if ( data.state === MatchingState.Error ) {
@@ -183,12 +219,54 @@ export class AppService {
   */
   public match(dictionary: DictionaryDoc, input: any[], parsingTime: number, quickMatch: boolean = false, targetHeader?: string): BehaviorSubject<MatchMessage> {
 
+    this._cancelMatching = false;
+
     const listener = new BehaviorSubject<MatchMessage>({ state: MatchingState.Started, message: 'Matching your data...' });
 
     this._match(dictionary, input, listener, parsingTime, quickMatch, targetHeader)
     .catch(listener.error);
 
     return listener;
+
+  }
+
+  /**
+  * Prompts the user to cancel the matching if it's in progress.
+  * Returns the user decision as boolean or true if no matching is in progress.
+  */
+  public async promptMatchCancellation(): Promise<boolean> {
+
+    // Return true if no matching is in progress
+    if ( ! this._matchingInProgress ) return true;
+
+    // Prompt the user
+    this.onPromptStateChanged.next({
+      id: 'matching-cancellation',
+      visible: true,
+      message: 'Navigating away will cancel the matching. Do you wish to continue?',
+      title: 'warning'
+    });
+
+    return await new Promise<boolean>(resolve => {
+
+      let sub: Subscription;
+
+      // Listen to user response
+      sub = this.onPromptResponse.subscribe(response => {
+
+        // If response is for another prompt, ignore
+        if ( response.id !== 'matching-cancellation' ) return;
+
+        // Cancel if necessary
+        if ( response.answer ) this._cancelMatching = true;
+
+        // Otherwise, resolve with user's answer
+        sub.unsubscribe();
+        resolve(response.answer);
+
+      });
+
+    });
 
   }
 
@@ -260,5 +338,21 @@ export interface FileDoc {
   filename: string;
   version: number;
   commitId: string;
+
+}
+
+export interface PromptMessage {
+
+  id: string;
+  visible: boolean;
+  message: string;
+  title: string;
+
+}
+
+export interface PromptResponse {
+
+  id: string;
+  answer: boolean;
 
 }

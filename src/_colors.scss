@@ -1,14 +1,22 @@
 $palette: (
   color-accent: #496DAA,
   color-accent-light: #4E74B5,
+  color-accent-transparent: rgba(73, 109, 170, .8),
   color-experimental: linear-gradient(#496DAA, #007eff),
   color-gray-light-transparent: rgba(255, 255, 255, .1),
   color-gray-lighter-transparent: rgba(255, 255, 255, .5),
   color-gray-lightest-transparent: rgba(255, 255, 255, .75),
   color-gray-transparent: rgba(255, 255, 255, .75),
-  color-gray-lighter: #FFFFFF,
-  color-gray-light: #FAFAFA,
-  color-gray-medium: #C4CAD5,
-  color-gray: #A1A6AE,
-  color-drop-shadow: rgba(0, 0, 0, .13)
+  color-gray-darkest-transparent: rgba(0, 0, 0, .5),
+  color-gray-lightest: #FFFFFF,
+  color-gray-lighter: #FAFAFA,
+  color-gray-light: #ECECEC,
+  color-gray-medium-light: #E8E8E8,
+  color-gray-medium: #D8D8D8,
+  color-gray-dark: #C4CAD5,
+  color-gray-darker: #E3E3E3,
+  color-gray-darkest: #A1A6AE,
+  color-drop-shadow: rgba(0, 0, 0, .13),
+  color-danger: #ef6060,
+  color-danger-light: #ff6e6e
 );

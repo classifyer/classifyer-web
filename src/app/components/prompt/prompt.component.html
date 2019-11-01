@@ -1,0 +1,11 @@
+<div class="backshadow" @fadeInOut *ngIf="visible">
+  <div class="modal-container">
+    <h2>{{ title }}</h2>
+    <hr>
+    <p>{{ message }}</p>
+    <div class="btn-group">
+      <button class="btn btn-secondary btn-block" (click)="onCancel()">Cancel</button>
+      <button class="btn btn-danger btn-block" (click)="onProceed()">Proceed</button>
+    </div>
+  </div>
+</div>

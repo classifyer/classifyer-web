@@ -6,9 +6,11 @@ import {
   AboutComponent
 } from '@components';
 
+import { CanCancelMatching } from '@guards/matching';
+
 
 const routes: Routes = [
-  { path: 'app', component: ApplicationComponent },
+  { path: 'app', component: ApplicationComponent, canDeactivate: [CanCancelMatching] },
   { path: 'contribute', component: ContributeComponent },
   { path: 'about', component: AboutComponent },
   { path: '**', redirectTo: '/app' }

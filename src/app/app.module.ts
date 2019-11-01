@@ -12,7 +12,8 @@ import {
   MenuComponent,
   ContributeComponent,
   AboutComponent,
-  ApplicationComponent
+  ApplicationComponent,
+  PromptComponent
 } from '@components';
 
 @NgModule({
@@ -22,7 +23,8 @@ import {
     MenuComponent,
     ContributeComponent,
     AboutComponent,
-    ApplicationComponent
+    ApplicationComponent,
+    PromptComponent
   ],
   imports: [
     BrowserModule,

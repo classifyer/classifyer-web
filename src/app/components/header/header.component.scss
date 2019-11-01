@@ -11,7 +11,7 @@ header {
   width: 100%;
   height: rem(90px);
   display: flex;
-  background-color: map-get($palette, color-gray-lighter);
+  background-color: map-get($palette, color-gray-lightest);
   box-shadow: 0 3px 20px map-get($palette, color-drop-shadow);
   z-index: 100;
   .brand {

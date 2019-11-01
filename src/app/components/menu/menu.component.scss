@@ -69,7 +69,7 @@
       padding: rem(10px) rem(20px);
       box-sizing: border-box;
       font-size: rem(20px);
-      color: map-get($palette, color-gray-lighter);
+      color: map-get($palette, color-gray-lightest);
       text-transform: uppercase;
       text-overflow: ellipsis;
       overflow-x: hidden;
