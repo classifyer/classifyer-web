@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FirebaseService } from './firebase.service';
-import { WorkerService } from './worker.service';
+import { WorkerService, WebWorker } from './worker.service';
 import { MatchMessage, MatchingState, ParseResult } from '@models/common';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import _ from 'lodash';
@@ -22,6 +22,7 @@ export class AppService {
   private _dataAvailable: boolean = false;
   private _matchingInProgress: boolean = false;
   private _cancelMatching: boolean = false;
+  private _activeWorkers: WebWorker[] = [];
   private _selectedDictionary: string = null;
 
   /** Emits when the data has changed due to updates or authentication changes. The boolean value indicates the data availability. */
@@ -140,6 +141,9 @@ export class AppService {
     // Create web worker
     const matcher = this.worker.wrap(new Worker('../workers/matcher.worker', { type: 'module' }));
 
+    // Add to active workers for future cancellation
+    this._activeWorkers.push(matcher);
+
     // Start the matching process and listen to messages
     matcher
     .send({
@@ -151,17 +155,6 @@ export class AppService {
       targetHeader: targetHeader
     })
     .listen<MatchMessage>(data => {
-
-      // Check for cancellation
-      if ( this._cancelMatching ) {
-
-        console.log('Matching cancelled!');
-        matcher.terminate();
-        this._cancelMatching = false;
-        this._matchingInProgress = false;
-        return;
-
-      }
 
       // Error message
       if ( data.state === MatchingState.Error ) {
@@ -258,7 +251,20 @@ export class AppService {
         if ( response.id !== 'matching-cancellation' ) return;
 
         // Cancel if necessary
-        if ( response.answer ) this._cancelMatching = true;
+        if ( response.answer ) {
+
+          this._cancelMatching = true;
+
+          // Only set matching in progress to false if the matching is in the worker phase
+          if ( this._activeWorkers.length ) this._matchingInProgress = false;
+
+          while ( this._activeWorkers.length ) {
+
+            this._activeWorkers.pop().terminate();
+
+          }
+
+        }
 
         // Otherwise, resolve with user's answer
         sub.unsubscribe();
@@ -278,6 +284,8 @@ export class AppService {
 
     const parser = this.worker.wrap(new Worker('../workers/parser.worker', { type: 'module' }));
 
+    this._activeWorkers.push(parser);
+
     return await parser.send({ csv: true, input: input }).toPromise<ParseResult>();
 
   }
@@ -289,6 +297,8 @@ export class AppService {
   public async parsePlainLiterals(input: string) {
 
     const parser = this.worker.wrap(new Worker('../workers/parser.worker', { type: 'module' }));
+
+    this._activeWorkers.push(parser);
 
     return await parser.send({ csv: false, input: input }).toPromise<ParseResult>();
 
