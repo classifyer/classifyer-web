@@ -1,0 +1,103 @@
+@import '../../../colors';
+@import '../../../util';
+
+:host {
+  width: 100%;
+  padding: rem(50px) rem(30px);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  *:first-child {
+    margin-top: 0;
+  }
+  *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.csv-headers-container {
+  margin: rem(20px) 0;
+  display: flex;
+  align-items: center;
+  .csv-headers-label {
+    margin-right: rem(20px);
+  }
+  select.csv-headers {
+    width: 100%;
+    max-width: rem(320px);
+  }
+}
+
+.dropbox {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: rem(3px) dashed map-get($palette, color-gray-medium);
+  border-radius: rem(5px);
+  padding: rem(20px);
+  box-sizing: border-box;
+  font-size: rem(20px);
+  color: map-get($palette, color-gray-darkest);
+  user-select: none;
+  cursor: pointer;
+  transition: color .2s ease-in-out, border-color .2s ease-in-out;
+  span {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    width: 100%;
+  }
+  svg.close-btn {
+    width: rem(25px);
+    height: rem(25px);
+    min-width: rem(25px);
+    min-height: rem(25px);
+    path {
+      transition: fill .2s ease-in-out;
+      fill: map-get($palette, color-gray-darkest);
+    }
+    &:hover path {
+      fill: map-get($palette, color-danger-light);
+    }
+  }
+  &:hover:not(.disabled),
+  &.active:not(.disabled) {
+    color: map-get($palette, color-accent);
+    border-color: map-get($palette, color-accent-light);
+    svg.icon path {
+      fill: map-get($palette, color-accent);
+    }
+  }
+  &.disabled {
+    cursor: default;
+  }
+  lottie-animation-view {
+    margin-right: rem(20px);
+  }
+  svg.icon {
+    height: rem(40px);
+    width: rem(40px);
+    min-height: rem(40px);
+    min-width: rem(40px);
+    margin-right: rem(20px);
+    path {
+      fill: map-get($palette, color-gray-darkest);
+      transition: fill .2s ease-in-out;
+    }
+  }
+}
+
+.btn-group {
+  justify-content: flex-end;
+  margin-top: rem(20px);
+}

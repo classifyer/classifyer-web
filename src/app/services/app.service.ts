@@ -24,6 +24,7 @@ export class AppService {
   private _cancelMatching: boolean = false;
   private _activeWorkers: WebWorker[] = [];
   private _selectedDictionary: string = null;
+  private _menuActive: boolean = true;
 
   /** Emits when the data has changed due to updates or authentication changes. The boolean value indicates the data availability. */
   public onDataChange: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._dataAvailable);
@@ -31,6 +32,10 @@ export class AppService {
   public onPromptStateChanged: BehaviorSubject<PromptMessage> = new BehaviorSubject<PromptMessage>({ id: null, visible: false, message: null, title: null });
   /** Used for responding back with an activated prompt. */
   public onPromptResponse: Subject<PromptResponse> = new Subject<PromptResponse>();
+  /** Emits when dictionary selection changes with a dictionary ID or null if none selected. */
+  public onDictionarySelectionChanged: BehaviorSubject<string> = new BehaviorSubject<string>(this.selectedDictionary);
+  /** Emits when the active state of the left menu changes. */
+  public onMenuStateChanged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._menuActive);
 
   constructor(
     private firebase: FirebaseService,
@@ -310,7 +315,10 @@ export class AppService {
   */
   public selectDictionary(id: string) {
 
-    if ( ! this._matchingInProgress ) this._selectedDictionary = id;
+    if ( this._matchingInProgress ) return;
+
+    this._selectedDictionary = id;
+    this.onDictionarySelectionChanged.next(id);
 
   }
 
@@ -320,6 +328,44 @@ export class AppService {
   public get selectedDictionary(): string {
 
     return this._selectedDictionary;
+
+  }
+
+  /**
+  * Reads file's content.
+  * @param file A file object retrieved from a FileList.
+  */
+  public readFile(file: File): Promise<string> {
+
+    return new Promise((resolve, reject) => {
+
+      if ( ! file ) return resolve(null);
+
+      const reader = new FileReader();
+
+      // On file read
+      reader.onloadend = () => {
+
+        if ( reader.error ) reject(reader.error);
+        else resolve(<string>reader.result);
+
+      };
+
+      // Start reading the file
+      reader.readAsText(file, 'utf8');
+
+    });
+
+  }
+
+  /**
+  * Sets the left menu active or inactive.
+  * @param active A boolean indicating the state of the menu.
+  */
+  public setMenuActive(active: boolean) {
+
+    this._menuActive = active;
+    this.onMenuStateChanged.next(active);
 
   }
 

@@ -65,24 +65,41 @@
       white-space: nowrap;
     }
     .classification {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       width: 100%;
       padding: rem(10px) rem(20px);
       box-sizing: border-box;
       font-size: rem(20px);
       color: map-get($palette, color-gray-lightest);
       text-transform: uppercase;
-      text-overflow: ellipsis;
-      overflow-x: hidden;
-      white-space: nowrap;
       border-radius: rem(3px);
       background-color: transparent;
       transition: background-color .2s ease-in-out;
-      cursor: pointer;
-      &:hover {
-        background-color: map-get($palette, color-gray-light-transparent);
+      &.enabled {
+        cursor: pointer;
+        &:hover {
+          background-color: map-get($palette, color-gray-light-transparent);
+        }
       }
-      &.active {
+      &.active .classification-name {
         font-weight: bold;
+      }
+      .classification-name {
+        text-overflow: ellipsis;
+        overflow-x: hidden;
+        white-space: nowrap;
+        width: 100%;
+      }
+      .classification-lang {
+        font-size: rem(12px);
+        font-weight: bold;
+        background-color: map-get($palette, color-gray-lightest);
+        color: map-get($palette, color-accent);
+        border-radius: rem(20px);
+        padding: rem(3px) rem(8px);
+        margin-left: rem(10px);
       }
     }
   }

@@ -22,16 +22,5 @@
     border-radius: rem(5px);
     background-color: map-get($palette, color-gray-lightest);
     box-shadow: 0 3px 20px map-get($palette, color-drop-shadow);
-    h2 {
-      font-size: rem(22px);
-      text-transform: uppercase;
-      margin: 0;
-    }
-    hr {
-      width: 100%;
-      height: rem(1px);
-      border: none;
-      background-color: map-get($palette, color-gray-medium);
-    }
   }
 }

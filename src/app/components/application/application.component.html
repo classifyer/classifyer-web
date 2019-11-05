@@ -1,1 +1,49 @@
-<p>application works!</p>
+<ng-template [ngIf]="dictionary">
+  <ng-template [ngIf]="state === screenStateEnum.Form">
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <h1>{{ dictionary.name }}</h1>
+      <hr>
+      <p>Please upload a CSV using the box below:</p>
+      <div class="dropbox"
+      [ngClass]="{ active: dropboxActive, disabled: dropboxDisabled }"
+      (dragover)="allowDrop($event)"
+      (drop)="onDrop($event)"
+      (dragleave)="onDragLeave()"
+      (click)="openFileDialog()">
+        <svg class="icon" *ngIf="! dropboxDisabled" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="m354 60c0-33.085938-26.914062-60-60-60h-234c-33.085938 0-60 26.914062-60 60v234c0 33.085938 26.914062 60 60 60h96v40h40v-40h98c33.085938 0 60-26.914062 60-60v-96h39v-40h-39zm-40 234c0 11.027344-8.972656 20-20 20h-234c-11.027344 0-20-8.972656-20-20v-234c0-11.027344 8.972656-20 20-20h234c11.027344 0 20 8.972656 20 20zm158 138h40v40c0 22.089844-17.910156 40-40 40h-39v-40h39zm-199 40h40v40h-40zm80 0h40v40h-40zm159-274v40h-40v-40h-39v-40h39c22.089844 0 40 17.910156 40 40zm-40 78h40v40h-40zm0 78h40v40h-40zm-276 118h39v40h-39c-22.089844 0-40-17.910156-40-40v-40h40zm37-318h40v120h-120v-40h51.714844l-71.359375-71.359375 28.285156-28.28125 71.359375 71.355469zm0 0"/></svg>
+        <lottie-animation-view *ngIf="dropboxDisabled" [options]="lottieConfig" width="40" height="40">
+        </lottie-animation-view>
+        <span>{{ selectedFile ? selectedFile.name : 'Drag and drop a CSV file into this box or click to browse' }}</span>
+        <svg class="close-btn" *ngIf="selectedFile" (click)="unloadFile($event)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 174.239 174.239">
+        	<path d="M87.12,0C39.082,0,0,39.082,0,87.12s39.082,87.12,87.12,87.12s87.12-39.082,87.12-87.12S135.157,0,87.12,0z M87.12,159.305
+         	c-39.802,0-72.185-32.383-72.185-72.185S47.318,14.935,87.12,14.935s72.185,32.383,72.185,72.185S126.921,159.305,87.12,159.305z"/>
+        	<path d="M120.83,53.414c-2.917-2.917-7.647-2.917-10.559,0L87.12,76.568L63.969,53.414c-2.917-2.917-7.642-2.917-10.559,0
+         	s-2.917,7.642,0,10.559l23.151,23.153L53.409,110.28c-2.917,2.917-2.917,7.642,0,10.559c1.458,1.458,3.369,2.188,5.28,2.188
+         	c1.911,0,3.824-0.729,5.28-2.188L87.12,97.686l23.151,23.153c1.458,1.458,3.369,2.188,5.28,2.188c1.911,0,3.821-0.729,5.28-2.188
+         	c2.917-2.917,2.917-7.642,0-10.559L97.679,87.127l23.151-23.153C123.747,61.057,123.747,56.331,120.83,53.414z"/>
+        </svg>
+      </div>
+      <input name="csvFile" ngModel #fileController type="file" accept=".csv, text/csv" (change)="onFileChange()">
+      <div class="csv-headers-container">
+        <select name="csvHeader" [ngModel]="null" required [disabled]="! selectedFile" #csvHeadersController class="csv-headers">
+          <option [value]="null" disabled selected hidden>Select the literals column...</option>
+          <option *ngFor="let header of csvHeaders" [value]="header">{{ header }}</option>
+        </select>
+      </div>
+      <p>Or provide a list of plain literals separated by new lines:</p>
+      <textarea #plainLiteralsController name="plainLiterals" ngModel required [disabled]="selectedFile" data-gramm_editor="false"></textarea>
+      <div class="btn-group">
+        <button [disabled]="f.invalid || formDisabled" type="submit" class="btn btn-primary">Start Matching</button>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template [ngIf]="state === screenStateEnum.Matching">
+    <p>{{ matchingMessage }}</p>
+  </ng-template>
+  <ng-template [ngIf]="state === screenStateEnum.Results">
+    <p>{{ matchResult | json }}</p>
+  </ng-template>
+</ng-template>
+<ng-template [ngIf]="! dictionary">
+  <p>No dictionary selected!</p>
+</ng-template>

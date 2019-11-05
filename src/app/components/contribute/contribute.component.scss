@@ -1,0 +1,17 @@
+@import '../../../colors';
+@import '../../../util';
+
+:host {
+  width: 100%;
+  padding: rem(50px) rem(30px);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  *:first-child {
+    margin-top: 0;
+  }
+  *:last-child {
+    margin-bottom: 0;
+  }
+}

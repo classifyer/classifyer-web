@@ -21,6 +21,7 @@ export class MenuComponent implements OnInit {
   public dictionaries: DictionaryDoc[] = [];
   public activeDictionary: string = null;
   public loading: boolean = true;
+  public enabled: boolean = true;
   public lottieConfig = {
     path: '/assets/spinner-white.json',
     autoplay: true,
@@ -41,6 +42,12 @@ export class MenuComponent implements OnInit {
 
     });
 
+    this.app.onMenuStateChanged.subscribe(active => {
+
+      this.enabled = active;
+
+    });
+
   }
 
   public getDictionariesOfCategory(id: string): DictionaryDoc[] {
@@ -50,6 +57,8 @@ export class MenuComponent implements OnInit {
   }
 
   public activateDictionary(id: string) {
+
+    if ( ! this.enabled ) return;
 
     this.app.selectDictionary(id);
     this.activeDictionary = this.app.selectedDictionary;

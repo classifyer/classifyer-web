@@ -6,8 +6,11 @@
       <span class="category-title">{{ category.name }}</span>
       <span class="classification"
       *ngFor="let dictionary of getDictionariesOfCategory(category.id)"
-      [ngClass]="{ active: activeDictionary === dictionary.id }"
-      (click)="activateDictionary(dictionary.id)">{{ dictionary.name }}</span>
+      [ngClass]="{ active: activeDictionary === dictionary.id, enabled: enabled }"
+      (click)="activateDictionary(dictionary.id)">
+        <span class="classification-name">{{ dictionary.name }}</span>
+        <span class="classification-lang">{{ dictionary.language }}</span>
+      </span>
     </div>
   </ng-template>
 </div>
