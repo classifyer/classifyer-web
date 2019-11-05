@@ -11,6 +11,41 @@ body {
   margin: 0;
   background-color: map-get($palette, color-gray-lighter);
   font-family: 'Roboto', sans-serif;
+  overflow-x: hidden;
+}
+
+// Container bottom padding fix for overflow-y
+@-moz-document url-prefix() {
+  app-application::after,
+  app-about::after,
+  app-contribute::after {
+    content: '';
+    padding-top: rem(50px);
+    display: block;
+  }
+  app-application,
+  app-about,
+  app-contribute {
+    scrollbar-color: map-get($palette, color-accent-light-transparent) map-get($palette, color-accent-lightest-transparent);
+    scrollbar-width: thin;
+  }
+}
+
+app-application,
+app-about,
+app-contribute {
+  &::-webkit-scrollbar {
+    width: rem(5px);
+  }
+  &::-webkit-scrollbar-track {
+    background: map-get($palette, color-accent-lightest-transparent);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: map-get($palette, color-accent-lighter-transparent);
+    &:hover {
+      background: map-get($palette, color-accent-light-transparent);
+    }
+  }
 }
 
 h1 {
