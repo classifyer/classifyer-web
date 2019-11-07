@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AppService } from '@services/app';
 
 @Component({
   selector: 'app-contribute',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ContributeComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private app: AppService
+  ) { }
 
   ngOnInit() {
+
+    this.app.setMenuActive(false);
+
   }
 
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { trigger, state, animate, style, transition } from '@angular/animations';
 import { AppService, DictionaryDoc } from '@services/app';
 import { ParseResult, MatchingState, MatchResult } from '@models/common';
 import { Subscription } from 'rxjs';
@@ -8,7 +9,36 @@ import _ from 'lodash';
 @Component({
   selector: 'app-application',
   templateUrl: './application.component.html',
-  styleUrls: ['./application.component.scss']
+  styleUrls: ['./application.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      state('void', style({
+        opacity: 0,
+        height: 0,
+        margin: 0
+      })),
+      transition('void => *', animate('.2s .2s'))
+    ]),
+    trigger('jumpIn', [
+      state('void', style({
+        display: 'none'
+      })),
+      transition('void => *', animate('0s .2s'))
+    ]),
+    trigger('fadeOut', [
+      state('void', style({
+        opacity: 0,
+        height: 0
+      })),
+      transition('* => void', animate('.2s'))
+    ]),
+    trigger('jumpOut', [
+      state('void', style({
+        display: 'none'
+      })),
+      transition('* => void', animate('0s .2s'))
+    ])
+  ]
 })
 export class ApplicationComponent implements OnInit, OnDestroy {
 
@@ -19,8 +49,10 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   @ViewChild('plainLiteralsController', { static: false })
   private plainLiteralsController: ElementRef<HTMLTextAreaElement>;
   private dictionarySub: Subscription;
+  private matchSub: Subscription;
   private selectedFile: File = null;
   private parsedInput: ParseResult = null;
+  private matchingAnimation: any = null;
 
   public dictionary: DictionaryDoc = null;
   public csvHeaders: string[] = [];
@@ -36,6 +68,21 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     path: '/assets/spinner-blue.json',
     autoplay: true,
     loop: true
+  };
+  public lottieConfigSuccess = {
+    path: '/assets/match-success.json',
+    autoplay: false,
+    loop: false
+  };
+  public lottieConfigFail = {
+    path: '/assets/match-fail.json',
+    autoplay: false,
+    loop: false
+  };
+  public lottieConfigError = {
+    path: '/assets/match-error.json',
+    autoplay: false,
+    loop: false
   };
 
   constructor(
@@ -78,15 +125,14 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     this.state = ScreenState.Matching;
     this.app.setMenuActive(false);
 
-    const sub = this.app.match(this.dictionary, input.result, input.time, quickMatch, targetHeader).subscribe(message => {
+    this.matchSub = this.app.match(this.dictionary, input.result, input.time, quickMatch, targetHeader).subscribe(message => {
 
       if ( message.state === MatchingState.Error ) {
 
         this.state = ScreenState.Error;
         this.matchingMessage = null;
-        sub.unsubscribe();
+        this.matchSub.unsubscribe();
         console.error(message.error);
-        this.app.setMenuActive(true);
         return;
 
       }
@@ -95,11 +141,18 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
       if ( message.state === MatchingState.Finished ) {
 
-        this.matchResult = message.result;
-        this.state = ScreenState.Results;
-        this.matchingMessage = null;
-        sub.unsubscribe();
-        this.app.setMenuActive(true);
+        const handler = () => {
+
+          this.matchingAnimation.removeEventListener('complete', handler);
+          this.matchResult = message.result;
+          this.state = ScreenState.Results;
+          this.matchingMessage = null;
+          this.matchSub.unsubscribe();
+
+        };
+
+        this.matchingAnimation.addEventListener('complete', handler);
+        this.matchingAnimation.loop = false;
 
       }
 
@@ -108,6 +161,8 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.app.setMenuActive(true);
 
     // Listen to dictionary selection changes
     this.dictionarySub = this.app.onDictionarySelectionChanged.subscribe(id => {
@@ -121,6 +176,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
 
     if ( this.dictionarySub && ! this.dictionarySub.closed ) this.dictionarySub.unsubscribe();
+    if ( this.matchSub && ! this.matchSub.closed ) this.matchSub.unsubscribe();
 
   }
 
@@ -211,6 +267,47 @@ export class ApplicationComponent implements OnInit, OnDestroy {
       });
 
     }
+
+  }
+
+  public registerMatchingAnimation(anim: any) {
+
+    this.matchingAnimation = anim;
+
+  }
+
+  public delayAnimation(anim: any, delay: number) {
+
+    setTimeout(() => anim.play(), delay);
+
+  }
+
+  public startOver() {
+
+    this.selectedFile = null;
+    this.csvHeaders = [];
+    this.formDisabled = false;
+    this.parsedInput = null;
+    this.matchingAnimation = null;
+    this.matchingMessage = null;
+    this.matchResult = null;
+    this.app.setMenuActive(true);
+    this.state = ScreenState.Form;
+
+  }
+
+  public downloadResults() {
+
+    location.assign(URL.createObjectURL(new Blob([this.matchResult.csv], { type: 'text/csv' })));
+
+
+  }
+
+  public roundToDecimal(num: number, precision?: number): number {
+
+    let multiplier = Math.pow(10, precision || 0);
+
+    return Math.round(num * multiplier) / multiplier;
 
   }
 

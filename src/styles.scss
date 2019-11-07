@@ -74,6 +74,12 @@ hr {
   & > *:not(:last-child) {
     margin-right: rem(15px);
   }
+  &.btn-group-centered {
+    justify-content: center !important;
+  }
+  &.btn-group-stretch > * {
+    width: 100%;
+  }
 }
 
 button.btn {
