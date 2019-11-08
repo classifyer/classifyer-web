@@ -50,10 +50,10 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   private plainLiteralsController: ElementRef<HTMLTextAreaElement>;
   private dictionarySub: Subscription;
   private matchSub: Subscription;
-  private selectedFile: File = null;
   private parsedInput: ParseResult = null;
   private matchingAnimation: any = null;
 
+  public selectedFile: File = null;
   public dictionary: DictionaryDoc = null;
   public csvHeaders: string[] = [];
   public formDisabled: boolean = false;
