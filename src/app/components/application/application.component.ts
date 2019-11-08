@@ -298,7 +298,17 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
   public downloadResults() {
 
-    location.assign(URL.createObjectURL(new Blob([this.matchResult.csv], { type: 'text/csv' })));
+    // Edge fix
+    if ( window.navigator && window.navigator.msSaveOrOpenBlob ) {
+
+      window.navigator.msSaveOrOpenBlob(new Blob([this.matchResult.csv], { type: 'text/csv' }));
+
+    }
+    else {
+
+      location.assign(URL.createObjectURL(new Blob([this.matchResult.csv], { type: 'text/csv' })));
+
+    }
 
 
   }
@@ -308,6 +318,12 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     let multiplier = Math.pow(10, precision || 0);
 
     return Math.round(num * multiplier) / multiplier;
+
+  }
+
+  public svgUrlPrefix(): string {
+
+    return location.pathname;
 
   }
 

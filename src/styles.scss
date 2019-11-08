@@ -178,3 +178,13 @@ select {
     color: map-get($palette, color-gray-darkest);
   }
 }
+
+.menu-blur {
+  height: 100%;
+  width: calc(100% - #{rem(375px)});
+  position: absolute;
+  right: 0;
+  z-index: 500;
+  background-color: map-get($palette, color-gray-lighter-transparent);
+  backdrop-filter: blur(10px);
+}

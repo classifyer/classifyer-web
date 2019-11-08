@@ -4,3 +4,4 @@
   <router-outlet></router-outlet>
 </div>
 <app-prompt #prompt></app-prompt>
+<div @fadeInOut *ngIf="menuOpened && app.breakpointActive" class="menu-blur"></div>

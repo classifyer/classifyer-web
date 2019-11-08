@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { AppService, DictionaryDoc } from '@services/app';
 import { PromptComponent } from '@components';
 import _ from 'lodash';
@@ -6,7 +7,16 @@ import _ from 'lodash';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  animations: [
+    trigger('fadeInOut', [
+      state('void', style({
+        opacity: 0
+      })),
+      transition(':enter', animate('.2s .2s')),
+      transition(':leave', animate(200))
+    ])
+  ]
 })
 export class AppComponent implements OnInit {
 

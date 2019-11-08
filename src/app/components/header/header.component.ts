@@ -34,4 +34,10 @@ export class HeaderComponent implements OnInit {
 
   }
 
+  public svgUrlPrefix(): string {
+
+    return location.pathname;
+
+  }
+
 }
