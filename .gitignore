@@ -47,4 +47,5 @@ Thumbs.db
 
 # Credentials
 .firebaserc
+.firebase
 /src/app/credentials/*.json

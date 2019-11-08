@@ -4,6 +4,7 @@ import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/storage';
+import 'firebase/analytics';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -18,6 +19,7 @@ export class FirebaseService {
   constructor() {
 
     firebase.initializeApp(credentials);
+    firebase.analytics();
 
     // Subscribe to auth changes
     firebase.auth().onAuthStateChanged(user => {
