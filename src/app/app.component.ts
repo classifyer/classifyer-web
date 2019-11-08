@@ -1,8 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { AppService, DictionaryDoc } from '@services/app';
-import { MatchingState, ParseResult } from '@models/common'
 import { PromptComponent } from '@components';
 import _ from 'lodash';
 
@@ -19,16 +16,55 @@ export class AppComponent implements OnInit {
   public dataAvailable: boolean = false;
   public dictionaries: DictionaryDoc[] = [];
   public headers: string[] = [];
+  public menuOpened: boolean = true;
 
   @ViewChild(PromptComponent, { static: false })
   private prompt: PromptComponent;
-  private userInput: ParseResult = null;
+
+  @HostListener('window:resize', ['$event'])
+  public onResize(event: Event) {
+
+    const target = <Window>event.target;
+
+    if ( target.innerWidth <= AppService.MENU_BREAKPOINT ) {
+
+      this.app.closeMenu();
+      this.app.setBreakpointActive(true);
+
+    }
+    else {
+
+      this.app.openMenu();
+      this.app.setBreakpointActive(false);
+
+    }
+
+  }
 
   constructor(
-    private app: AppService
+    public app: AppService
   ) {}
 
   ngOnInit() {
+
+    if ( window.innerWidth <= AppService.MENU_BREAKPOINT ) {
+
+      this.app.closeMenu();
+      this.app.setBreakpointActive(true);
+
+    }
+    else {
+
+      this.app.openMenu();
+      this.app.setBreakpointActive(false);
+
+    }
+
+    this.app.onMenuAccessibilityChanged.subscribe(opened => {
+
+      this.menuOpened = opened;
+
+    });
 
     this.app.onDataChange.subscribe(available => {
 
@@ -51,84 +87,11 @@ export class AppComponent implements OnInit {
 
   }
 
-  public onCSVChanged() {
+  public onMenuClicked() {
 
-    this.userInput = null;
-    this.headers = [];
+    if ( this.menuOpened ) return;
 
-    // Get reference to the file input
-    const file: File = this.csvInput.nativeElement.files.length ? this.csvInput.nativeElement.files.item(0) : null;
-
-    if ( ! file ) return;
-
-    // Read the file content
-    const reader = new FileReader();
-
-    // When file read
-    reader.onloadend = () => {
-
-      this.app.parseCSV(<string>reader.result)
-      .then(result => {
-
-        this.userInput = result;
-
-        if ( result.result && result.result.length ) this.headers = _.keys(result.result[0]);
-
-        console.log(this.userInput);
-
-      })
-      .catch(console.error);
-
-    };
-
-    // Start reading the file
-    reader.readAsText(file, 'utf8');
-
-  }
-
-  public onFormSubmit(form: NgForm) {
-
-    if ( form.invalid || ! this.userInput ) return;
-
-    console.log(`Selected dictionary: ${this.dictionaries[+form.value.dictionary].name}`);
-
-    let sub: Subscription;
-
-    // sub = this.app.match(this.dictionaries[+form.value.dictionary], this.userInput.result, this.userInput.time, false, this.headers[+form.value.header])
-    // .subscribe(progress => {
-    //
-    //   console.log(progress);
-    //
-    //   if ( progress.state === MatchingState.Finished ) {
-    //
-    //     sub.unsubscribe();
-    //
-    //   }
-    //
-    // });
-
-    this.app.parsePlainLiterals('Islam\nAtheist')
-    .then(result => {
-
-      this.userInput = result;
-
-      console.log(this.userInput);
-
-      sub = this.app.match(this.dictionaries[+form.value.dictionary], this.userInput.result, this.userInput.time, true)
-      .subscribe(progress => {
-
-        console.log(progress);
-
-        if ( progress.state === MatchingState.Finished ) {
-
-          sub.unsubscribe();
-
-        }
-
-      });
-
-    })
-    .catch(console.error);
+    this.app.openMenu(true);
 
   }
 

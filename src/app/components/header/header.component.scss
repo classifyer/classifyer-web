@@ -1,6 +1,19 @@
 @import '../../../util';
 @import '../../../colors';
 
+// Responsive brand header
+header .brand.closed {
+  width: rem(100px) !important;
+  min-width: rem(100px) !important;
+  max-width: rem(100px) !important;
+  svg.minimal {
+    display: block !important;
+  }
+  svg.large {
+    display: none !important;
+  }
+}
+
 app-header {
   display: flex;
   width: 100%;
@@ -16,14 +29,24 @@ header {
   z-index: 100;
   .brand {
     display: flex;
+    overflow-x: hidden;
     align-items: center;
     width: rem(375px);
     min-width: rem(375px);
+    max-width: rem(375px);
     height: 100%;
     background-color: map-get($palette, color-accent-light);
+    transition: width .2s ease-in-out, min-width .2s ease-in-out, max-width .2s ease-in-out;
     svg {
       height: 60%;
       margin-left: rem(30px);
+      flex-shrink: 0;
+    }
+    svg.minimal {
+      display: none;
+    }
+    &.active {
+      cursor: pointer;
     }
   }
   nav {

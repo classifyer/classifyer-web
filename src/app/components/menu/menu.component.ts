@@ -22,6 +22,7 @@ export class MenuComponent implements OnInit {
   public activeDictionary: string = null;
   public loading: boolean = true;
   public enabled: boolean = true;
+  public opened: boolean = true;
   public lottieConfig = {
     path: '/assets/spinner-white.json',
     autoplay: true,
@@ -33,6 +34,12 @@ export class MenuComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    this.app.onMenuAccessibilityChanged.subscribe(opened => {
+
+      this.opened = opened;
+
+    });
 
     this.app.onDataChange.subscribe(available => {
 
@@ -56,12 +63,20 @@ export class MenuComponent implements OnInit {
 
   }
 
-  public activateDictionary(id: string) {
+  public activateDictionary(id: string, event: MouseEvent) {
 
-    if ( ! this.enabled ) return;
+    if ( ! this.enabled || ! this.opened ) return;
 
     this.app.selectDictionary(id);
     this.activeDictionary = this.app.selectedDictionary;
+
+    if ( this.app.breakpointActive ) {
+
+      this.app.closeMenu(true);
+      event.preventDefault();
+      event.stopPropagation();
+
+    }
 
   }
 

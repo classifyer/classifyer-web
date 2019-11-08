@@ -26,6 +26,18 @@
   }
 }
 
+svg.logo {
+  height: auto;
+  width: rem(350px);
+}
+
+span.slogan {
+  font-size: rem(24px);
+  color: map-get($palette, color-gray-darkest);
+  text-transform: uppercase;
+  margin-top: rem(20px);
+}
+
 form {
   display: flex;
   flex-direction: column;

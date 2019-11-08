@@ -11,3 +11,8 @@
   display: flex;
   height: calc(100% - #{rem(90px)});
 }
+
+app-menu.active,
+app-menu.active * {
+  cursor: pointer !important;
+}

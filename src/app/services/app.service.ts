@@ -25,6 +25,12 @@ export class AppService {
   private _activeWorkers: WebWorker[] = [];
   private _selectedDictionary: string = null;
   private _menuActive: boolean = true;
+  private _menuOpened: boolean = true;
+  private _keepOpened: boolean = false;
+  private _breakpointActive: boolean = false;
+
+  /** Responsive breakpoint for minimal menu. */
+  static readonly MENU_BREAKPOINT: number = 992;
 
   /** Emits when the data has changed due to updates or authentication changes. The boolean value indicates the data availability. */
   public onDataChange: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._dataAvailable);
@@ -36,6 +42,8 @@ export class AppService {
   public onDictionarySelectionChanged: BehaviorSubject<string> = new BehaviorSubject<string>(this.selectedDictionary);
   /** Emits when the active state of the left menu changes. */
   public onMenuStateChanged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._menuActive);
+  /** Emits when the opened/closed state of the left menu changes. */
+  public onMenuAccessibilityChanged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._menuOpened);
 
   constructor(
     private firebase: FirebaseService,
@@ -359,6 +367,15 @@ export class AppService {
   }
 
   /**
+  * Returns the accessibility state of the left menu.
+  */
+  public get menuOpened(): boolean {
+
+    return this._menuOpened;
+
+  }
+
+  /**
   * Sets the left menu active or inactive.
   * @param active A boolean indicating the state of the menu.
   */
@@ -366,6 +383,48 @@ export class AppService {
 
     this._menuActive = active;
     this.onMenuStateChanged.next(active);
+
+  }
+
+  /**
+  * Closes the left menu.
+  * @param force Force closes the menu if it was kept open (also resets keepOpened).
+  */
+  public closeMenu(force?: boolean) {
+
+    if ( ! this._menuOpened || (! force && this._keepOpened) ) return;
+
+    this.onMenuAccessibilityChanged.next(false);
+    this._menuOpened = false;
+    this._keepOpened = false;
+
+  }
+
+  /**
+  * Opens the left menu.
+  * @param keepOpened Keeps the menu opened by ignoring close command (unless forced).
+  */
+  public openMenu(keepOpened?: boolean) {
+
+    if ( this._menuOpened ) return;
+
+    this.onMenuAccessibilityChanged.next(true);
+    this._menuOpened = true;
+    this._keepOpened = !! keepOpened;
+
+  }
+
+  public setBreakpointActive(active: boolean) {
+
+    this._breakpointActive = active;
+
+    if ( ! active ) this._keepOpened = false;
+
+  }
+
+  public get breakpointActive(): boolean {
+
+    return this._breakpointActive;
 
   }
 

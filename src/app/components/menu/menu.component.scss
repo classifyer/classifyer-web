@@ -1,6 +1,16 @@
 @import '../../../colors';
 @import '../../../util';
 
+// Responsive menu
+:host.closed {
+  width: rem(100px) !important;
+  min-width: rem(100px) !important;
+  max-width: rem(100px) !important;
+}
+:host.closed .category-container {
+  opacity: 0 !important;
+}
+
 ::-webkit-scrollbar {
   width: rem(5px);
 }
@@ -24,6 +34,7 @@
   max-width: rem(375px);
   height: 100%;
   background: map-get($palette, color-experimental);
+  transition: width .2s ease-in-out, max-width .2s ease-in-out, min-width .2s ease-in-out;
 }
 
 // Container bottom padding fix for overflow-y
@@ -54,6 +65,8 @@
     display: flex;
     flex-direction: column;
     user-select: none;
+    opacity: 1;
+    transition: opacity .2s ease-in-out;
     .category-title {
       font-size: rem(28px);
       margin-top: rem(20px);
