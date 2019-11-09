@@ -105,4 +105,12 @@ export class AppComponent implements OnInit {
 
   }
 
+  public onBlurClick() {
+
+    if ( ! this.menuOpened ) return;
+
+    this.app.closeMenu(true);
+
+  }
+
 }
