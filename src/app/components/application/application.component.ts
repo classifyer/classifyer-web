@@ -5,6 +5,7 @@ import { AppService, DictionaryDoc } from '@services/app';
 import { ParseResult, MatchingState, MatchResult } from '@models/common';
 import { Subscription } from 'rxjs';
 import _ from 'lodash';
+import fileSaver from 'file-saver';
 
 @Component({
   selector: 'app-application',
@@ -298,18 +299,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
   public downloadResults() {
 
-    // Edge fix
-    if ( window.navigator && window.navigator.msSaveOrOpenBlob ) {
-
-      window.navigator.msSaveOrOpenBlob(new Blob([this.matchResult.csv], { type: 'text/csv' }));
-
-    }
-    else {
-
-      location.assign(URL.createObjectURL(new Blob([this.matchResult.csv], { type: 'text/csv' })));
-
-    }
-
+    fileSaver.saveAs(new Blob([this.matchResult.csv], { type: 'text/csv;charset=utf-8' }), 'results.csv');
 
   }
 
