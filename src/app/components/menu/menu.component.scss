@@ -6,6 +6,9 @@
   width: rem(100px) !important;
   min-width: rem(100px) !important;
   max-width: rem(100px) !important;
+  .container {
+    overflow-y: hidden !important;
+  }
 }
 :host.closed .category-container {
   opacity: 0 !important;
