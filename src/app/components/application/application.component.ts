@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { trigger, state, animate, style, transition } from '@angular/animations';
+import { trigger, state, animate, style, transition, keyframes } from '@angular/animations';
 import { AppService, DictionaryDoc } from '@services/app';
 import { ParseResult, MatchingState, MatchResult } from '@models/common';
 import { Subscription } from 'rxjs';
@@ -18,26 +18,13 @@ import fileSaver from 'file-saver';
         height: 0,
         margin: 0
       })),
-      transition('void => *', animate('.2s .2s'))
-    ]),
-    trigger('jumpIn', [
-      state('void', style({
-        display: 'none'
-      })),
-      transition('void => *', animate('0s .2s'))
+      transition(':enter', animate('.2s .2s'))
     ]),
     trigger('fadeOut', [
-      state('void', style({
-        opacity: 0,
-        height: 0
-      })),
-      transition('* => void', animate('.2s'))
-    ]),
-    trigger('jumpOut', [
-      state('void', style({
-        display: 'none'
-      })),
-      transition('* => void', animate('0s .2s'))
+      transition(':leave', animate('.2s', keyframes([
+        style({ opacity: 1, height: 'auto', 'overflow-y': 'hidden', offset: 0 }),
+        style({ opacity: 0, height: 0, 'overflow-y': 'hidden', offset: 1 })
+      ])))
     ])
   ]
 })
@@ -72,17 +59,17 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   };
   public lottieConfigSuccess = {
     path: '/assets/match-success.json',
-    autoplay: false,
+    autoplay: true,
     loop: false
   };
   public lottieConfigFail = {
     path: '/assets/match-fail.json',
-    autoplay: false,
+    autoplay: true,
     loop: false
   };
   public lottieConfigError = {
     path: '/assets/match-error.json',
-    autoplay: false,
+    autoplay: true,
     loop: false
   };
 

@@ -159,3 +159,10 @@ span.matching-message-bold {
 .matching-animation {
   margin-bottom: rem(40px);
 }
+
+.animation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: rem(20px);
+}
