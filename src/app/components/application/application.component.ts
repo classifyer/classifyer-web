@@ -298,12 +298,6 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
   }
 
-  public svgUrlPrefix(): string {
-
-    return location.pathname;
-
-  }
-
 }
 
 export enum ScreenState {
