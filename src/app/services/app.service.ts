@@ -173,8 +173,7 @@ export class AppService {
       quickMatch: quickMatch,
       downloadTime: Math.round(downloadTimeEnd - downloadTimeStart),
       parsingTime: parsingTime,
-      targetHeader: targetHeader,
-      userAgent: window.navigator.userAgent
+      targetHeader: targetHeader
     })
     .listen<MatchMessage>(data => {
 

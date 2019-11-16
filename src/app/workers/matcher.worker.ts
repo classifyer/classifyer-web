@@ -1,7 +1,6 @@
 /// <reference lib="webworker" />
 import pako from 'pako';
 import _ from 'lodash';
-import { UAParser } from 'ua-parser-js';
 import { Parser } from 'json2csv';
 import { DictionaryData, DictionaryMapping, MatchMessage, MatchingState, MatchMessageEvent } from '@models/common';
 
@@ -170,17 +169,13 @@ addEventListener('message', async (event: MatchMessageEvent) => {
 
   }
 
-  // Detect OS from useragent
-  const agent = new UAParser(event.data.userAgent);
-  const EOL: string = agent.getOS().name === 'Windows' ? '\r\n' : '\n';
-console.log(agent.getOS().name)
   // Convert JSON to CSV
   const parser = new Parser({
     fields: csvHeaders,
-    eol: EOL,
     defaultValue: 'null'
   });
-  const finalCsv = (agent.getOS().name === 'Mac OS' ? 'sep=,' + EOL : '') + parser.parse(csvData);
+
+  const finalCsv = parser.parse(csvData);
 
   // Convert JSON to Excel (for quick match copy to clipboard feature)
   let tabDelimited: string = undefined;
@@ -190,10 +185,10 @@ console.log(agent.getOS().name)
     const tabParser = new Parser({
       fields: csvHeaders,
       header: false,
-      eol: EOL,
       delimiter: '\t',
       defaultValue: 'null'
     });
+
     tabDelimited = tabParser.parse(csvData);
 
   }
