@@ -61,6 +61,7 @@ export interface MatchingInput {
 
   input: any[];
   targetHeader?: string;
+  userAgent: string;
   dictionary: Uint8Array;
   quickMatch: boolean;
   downloadTime: number;

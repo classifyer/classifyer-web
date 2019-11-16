@@ -1,7 +1,7 @@
 /// <reference lib="webworker" />
 import pako from 'pako';
 import _ from 'lodash';
-import os from 'os';
+import { UAParser } from 'ua-parser-js';
 import { Parser } from 'json2csv';
 import { DictionaryData, DictionaryMapping, MatchMessage, MatchingState, MatchMessageEvent } from '@models/common';
 
@@ -79,6 +79,8 @@ addEventListener('message', async (event: MatchMessageEvent) => {
 
   // Parse the result as string CSV (output)
   parsingOutputTimeStart = performance.now();
+
+  postMessage(new MatchMessage(MatchingState.ParsingOutput, 'Preparing the results...'));
 
   const csvData: any[] = [];
   let csvHeaders: string[] = [];
@@ -168,13 +170,17 @@ addEventListener('message', async (event: MatchMessageEvent) => {
 
   }
 
+  // Detect OS from useragent
+  const agent = new UAParser(event.data.userAgent);
+  const EOL: string = agent.getOS().name === 'Windows' ? '\r\n' : '\n';
+console.log(agent.getOS().name)
   // Convert JSON to CSV
   const parser = new Parser({
     fields: csvHeaders,
-    eol: os.EOL,
+    eol: EOL,
     defaultValue: 'null'
   });
-  const finalCsv = parser.parse(csvData);
+  const finalCsv = (agent.getOS().name === 'Mac OS' ? 'sep=,' + EOL : '') + parser.parse(csvData);
 
   // Convert JSON to Excel (for quick match copy to clipboard feature)
   let tabDelimited: string = undefined;
@@ -184,7 +190,7 @@ addEventListener('message', async (event: MatchMessageEvent) => {
     const tabParser = new Parser({
       fields: csvHeaders,
       header: false,
-      eol: os.EOL,
+      eol: EOL,
       delimiter: '\t',
       defaultValue: 'null'
     });
