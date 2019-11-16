@@ -2,7 +2,19 @@
   "name": "classifyer",
   "description": "A centralized platform for mapping literals with various classification systems.",
   "author": "Ramtin Soltani <ramtin@chiselpowered.com>",
+  "contributors": [
+    "Ashkan Ashkpour <ashkan.ashkpour@chiselpowered.com>"
+  ],
   "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/classifyer/classifyer-web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/classifyer/classifyer-web/issues"
+  },
+  "homepage": "https://github.com/classifyer/classifyer-web#readme",
+  "license": "GPL-3.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

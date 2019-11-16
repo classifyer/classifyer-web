@@ -30,3 +30,7 @@ This is the repository of Classifyer web application.
   - Finally, generate your credentials file for the web through the Firebase console and store it at `/src/app/credentials/firebase.json`
 4. Build the app: `ng build --prod`
 5. Deploy: `firebase deploy`
+
+## Versioning
+
+Use `npm run version -- 0.0.0` to change the versioning of the application (replace `0.0.0` with the desired version).
