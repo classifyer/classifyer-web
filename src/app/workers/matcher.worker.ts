@@ -1,6 +1,7 @@
 /// <reference lib="webworker" />
 import pako from 'pako';
 import _ from 'lodash';
+import os from 'os';
 import { Parser } from 'json2csv';
 import { DictionaryData, DictionaryMapping, MatchMessage, MatchingState, MatchMessageEvent } from '@models/common';
 
@@ -168,8 +169,28 @@ addEventListener('message', async (event: MatchMessageEvent) => {
   }
 
   // Convert JSON to CSV
-  const parser = new Parser({ fields: csvHeaders });
+  const parser = new Parser({
+    fields: csvHeaders,
+    eol: os.EOL,
+    defaultValue: 'null'
+  });
   const finalCsv = parser.parse(csvData);
+
+  // Convert JSON to Excel (for quick match copy to clipboard feature)
+  let tabDelimited: string = undefined;
+
+  if ( event.data.quickMatch ) {
+
+    const tabParser = new Parser({
+      fields: csvHeaders,
+      header: false,
+      eol: os.EOL,
+      delimiter: '\t',
+      defaultValue: 'null'
+    });
+    tabDelimited = tabParser.parse(csvData);
+
+  }
 
   parsingOutputTimeEnd = performance.now();
 
@@ -177,6 +198,7 @@ addEventListener('message', async (event: MatchMessageEvent) => {
 
   postMessage(new MatchMessage(MatchingState.Finished, 'Done!', {
     csv: finalCsv,
+    tabDelimited: tabDelimited,
     count: matchCount,
     downloadTime: event.data.downloadTime,
     decompressionTime: Math.round(decompressionTimeEnd - decompressionTimeStart),

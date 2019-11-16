@@ -28,6 +28,7 @@ export interface MatchResult {
 
   count: number;
   csv: string;
+  tabDelimited?: string;
   downloadTime: number;
   decompressionTime: number;
   parsingInputTime: number;

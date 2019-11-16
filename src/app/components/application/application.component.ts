@@ -318,8 +318,8 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
   public copyResults() {
 
-    // Copy the content without headers (if newline detection fails it would fallback to copying the headers)
-    this.clipboard.copyFromContent(this.matchResult.csv.substr(this.matchResult.csv.indexOf('\n') + 1));
+    // Copy the excel version
+    this.clipboard.copyFromContent(this.matchResult.tabDelimited);
 
   }
 
