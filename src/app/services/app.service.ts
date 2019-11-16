@@ -126,7 +126,6 @@ export class AppService {
     // Check for cancellation
     if ( this._cancelMatching ) {
 
-      console.log('Matching cancelled!');
       this._cancelMatching = false;
       this._matchingInProgress = false;
       this._needsCleanup = false;
@@ -150,7 +149,6 @@ export class AppService {
     // Check for cancellation
     if ( this._cancelMatching ) {
 
-      console.log('Matching cancelled!');
       this._cancelMatching = false;
       this._matchingInProgress = false;
       this._needsCleanup = false;

@@ -26,8 +26,6 @@ export class FirebaseService {
 
       this.authenticated = !! user;
 
-      console.log(`AUTH STATE:`, this.authenticated);
-
       this.onAuthChange.next(this.authenticated);
 
       if ( user ) return;

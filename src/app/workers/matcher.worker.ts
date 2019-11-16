@@ -79,9 +79,6 @@ addEventListener('message', async (event: MatchMessageEvent) => {
   // Parse the result as string CSV (output)
   parsingOutputTimeStart = performance.now();
 
-  console.log(JSON.stringify(result, null, 2));
-  console.log(JSON.stringify(event.data.input, null, 2));
-
   const csvData: any[] = [];
   let csvHeaders: string[] = [];
   let inputHeadersSet: boolean = false;
@@ -169,9 +166,6 @@ addEventListener('message', async (event: MatchMessageEvent) => {
     }
 
   }
-
-  console.log(JSON.stringify(csvData, null, 2));
-  console.log(JSON.stringify(csvHeaders));
 
   // Convert JSON to CSV
   const parser = new Parser({ fields: csvHeaders });

@@ -80,8 +80,6 @@ export class AppComponent implements OnInit {
 
       this.dataAvailable = available;
 
-      console.log('DATA AVAILABILITY:', available);
-
       if ( ! available ) return;
 
       this.dictionaries = this.app.dictionaries;
