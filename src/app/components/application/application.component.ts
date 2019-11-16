@@ -193,6 +193,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
 
+    this.app.unmarkCleanup();
     if ( this.dictionarySub && ! this.dictionarySub.closed ) this.dictionarySub.unsubscribe();
     if ( this.matchSub && ! this.matchSub.closed ) this.matchSub.unsubscribe();
     if ( this.cleanupSub && ! this.cleanupSub.closed ) this.cleanupSub.unsubscribe();

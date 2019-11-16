@@ -455,6 +455,15 @@ export class AppService {
 
   }
 
+  /**
+  * Unmarks matching cleanup flag.
+  */
+  public unmarkCleanup(): void {
+
+    this._needsCleanup = false;
+
+  }
+
 }
 
 export interface CategoryDoc {
