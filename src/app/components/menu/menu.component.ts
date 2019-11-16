@@ -67,6 +67,8 @@ export class MenuComponent implements OnInit {
 
     if ( ! this.enabled || ! this.opened ) return;
 
+    this.app.matchCleanup();
+    this.app.onSetViewToForm.next();
     this.app.selectDictionary(id);
     this.activeDictionary = this.app.selectedDictionary;
 

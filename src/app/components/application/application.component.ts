@@ -39,6 +39,8 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   private plainLiteralsController: ElementRef<HTMLTextAreaElement>;
   private dictionarySub: Subscription;
   private matchSub: Subscription;
+  private cleanupSub: Subscription;
+  private stateChangeSub: Subscription;
   private parsedInput: ParseResult = null;
   private matchingAnimation: any = null;
 
@@ -124,6 +126,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
         this.matchingMessage = null;
         this.matchSub.unsubscribe();
         console.error(message.error);
+        this.app.setMenuActive(true);
         return;
 
       }
@@ -140,6 +143,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
           this.state = ScreenState.Results;
           this.matchingMessage = null;
           this.matchSub.unsubscribe();
+          this.app.setMenuActive(true);
 
         };
 
@@ -163,12 +167,36 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
     });
 
+    // Listen to cleanup requests
+    this.cleanupSub = this.app.onMatchingCleanup.subscribe(() => {
+
+      this.selectedFile = null;
+      this.csvHeaders = [];
+      this.formDisabled = false;
+      this.parsedInput = null;
+      this.matchingAnimation = null;
+      this.matchingMessage = null;
+      this.matchResult = null;
+      this.quickMatch = false;
+      this.app.setMenuActive(true);
+
+    });
+
+    // Listen to external state changes
+    this.stateChangeSub = this.app.onSetViewToForm.subscribe(() => {
+
+      this.state = ScreenState.Form;
+
+    });
+
   }
 
   ngOnDestroy() {
 
     if ( this.dictionarySub && ! this.dictionarySub.closed ) this.dictionarySub.unsubscribe();
     if ( this.matchSub && ! this.matchSub.closed ) this.matchSub.unsubscribe();
+    if ( this.cleanupSub && ! this.cleanupSub.closed ) this.cleanupSub.unsubscribe();
+    if ( this.stateChangeSub && ! this.stateChangeSub.closed ) this.stateChangeSub.unsubscribe();
 
   }
 
@@ -276,15 +304,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
   public startOver() {
 
-    this.selectedFile = null;
-    this.csvHeaders = [];
-    this.formDisabled = false;
-    this.parsedInput = null;
-    this.matchingAnimation = null;
-    this.matchingMessage = null;
-    this.matchResult = null;
-    this.quickMatch = false;
-    this.app.setMenuActive(true);
+    this.app.onMatchingCleanup.next();
     this.state = ScreenState.Form;
 
   }

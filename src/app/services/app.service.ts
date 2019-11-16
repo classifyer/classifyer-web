@@ -28,6 +28,7 @@ export class AppService {
   private _menuOpened: boolean = true;
   private _keepOpened: boolean = false;
   private _breakpointActive: boolean = false;
+  private _needsCleanup: boolean = false;
 
   /** Responsive breakpoint for minimal menu. */
   static readonly MENU_BREAKPOINT: number = 992;
@@ -44,6 +45,10 @@ export class AppService {
   public onMenuStateChanged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._menuActive);
   /** Emits when the opened/closed state of the left menu changes. */
   public onMenuAccessibilityChanged: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this._menuOpened);
+  /** Emits when a cleanup needs to occur after matching. */
+  public onMatchingCleanup: Subject<void> = new Subject<void>();
+  /** Emits when application view needs to switch to Form state. */
+  public onSetViewToForm: Subject<void> = new Subject<void>();
 
   constructor(
     private firebase: FirebaseService,
@@ -124,6 +129,7 @@ export class AppService {
       console.log('Matching cancelled!');
       this._cancelMatching = false;
       this._matchingInProgress = false;
+      this._needsCleanup = false;
       return;
 
     }
@@ -147,6 +153,7 @@ export class AppService {
       console.log('Matching cancelled!');
       this._cancelMatching = false;
       this._matchingInProgress = false;
+      this._needsCleanup = false;
       return;
 
     }
@@ -226,6 +233,7 @@ export class AppService {
   public match(dictionary: DictionaryDoc, input: any[], parsingTime: number, quickMatch: boolean = false, targetHeader?: string): BehaviorSubject<MatchMessage> {
 
     this._cancelMatching = false;
+    this._needsCleanup = true;
 
     const listener = new BehaviorSubject<MatchMessage>({ state: MatchingState.Started, message: 'Matching your data...' });
 
@@ -276,6 +284,8 @@ export class AppService {
             this._activeWorkers.pop().terminate();
 
           }
+
+          this._needsCleanup = false;
 
         }
 
@@ -414,6 +424,10 @@ export class AppService {
 
   }
 
+  /**
+  * Sets the left menu's breakpoint active or deactive.
+  * @param active The active state.
+  */
   public setBreakpointActive(active: boolean) {
 
     this._breakpointActive = active;
@@ -422,9 +436,24 @@ export class AppService {
 
   }
 
+  /**
+  * Left menu breakpoint active state.
+  */
   public get breakpointActive(): boolean {
 
     return this._breakpointActive;
+
+  }
+
+  /**
+  * Triggers a matching cleanup if necessary.
+  */
+  public matchCleanup(): void {
+
+    if ( ! this._needsCleanup ) return;
+
+    this.onMatchingCleanup.next();
+    this._needsCleanup = false;
 
   }
 
