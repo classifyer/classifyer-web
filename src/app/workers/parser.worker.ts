@@ -1,6 +1,7 @@
 /// <reference lib="webworker" />
 import { ParseMessageEvent } from '@models/common';
 import csv from 'csvtojson';
+import _ from 'lodash';
 
 addEventListener('message', async (event: ParseMessageEvent) => {
 
@@ -8,7 +9,11 @@ addEventListener('message', async (event: ParseMessageEvent) => {
   if ( event.data.csv ) {
 
     const parsingInputTimeStart = performance.now();
-    const result = await csv().fromString(event.data.input);
+    // Extract headers from input
+    const originalHeaders = _.values((await csv({ noheader: true }).fromString(event.data.input.substr(0, event.data.input.indexOf('\n')).replace(/\r/g, '')))[0]);
+    // Make headers unique by appending "1" to them to avoid overwriting matched data with the same headers
+    // This will be reverted in the end
+    const result = await csv({ headers: originalHeaders.map(header => header + '1') }).fromString(event.data.input);
     const parsingInputTimeEnd = performance.now();
 
     postMessage({

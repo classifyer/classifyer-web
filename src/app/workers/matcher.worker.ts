@@ -175,7 +175,28 @@ addEventListener('message', async (event: MatchMessageEvent) => {
     defaultValue: 'null'
   });
 
-  const finalCsv = parser.parse(csvData);
+  let finalCsv = parser.parse(csvData);
+
+  // Revert original headers (remove "1") if CSV match
+  if ( ! event.data.quickMatch ) {
+
+    let originalDone: boolean = false;
+    let originalHeaders = csvHeaders.map(header => {
+
+      if ( originalDone || header === 'code' ) {
+
+        originalDone = true;
+        return `"${header}"`;
+
+      }
+
+      return `"${header.substr(0, header.length - 1)}"`;
+
+    });
+
+    finalCsv = finalCsv.replace(finalCsv.substr(0, finalCsv.indexOf('\n') + 1), originalHeaders.join(',') + '\n');
+
+  }
 
   // Convert JSON to Excel (for quick match copy to clipboard feature)
   let tabDelimited: string = undefined;

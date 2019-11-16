@@ -29,7 +29,7 @@
         <div class="csv-headers-container">
           <select name="csvHeader" [ngModel]="null" required [disabled]="! selectedFile" #csvHeadersController class="csv-headers">
             <option [value]="null" disabled selected hidden>Select the literals column...</option>
-            <option *ngFor="let header of csvHeaders" [value]="header">{{ header }}</option>
+            <option *ngFor="let header of csvHeaders" [value]="header">{{ header.substr(0, header.length - 1) }}</option>
           </select>
         </div>
         <p>Or provide a list of plain literals separated by new lines:</p>
