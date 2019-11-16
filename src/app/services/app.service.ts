@@ -5,6 +5,7 @@ import { WorkerService, WebWorker } from './worker.service';
 import { MatchMessage, MatchingState, ParseResult } from '@models/common';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import _ from 'lodash';
+import { version } from '../../environments/version';
 
 @Injectable({
   providedIn: 'root'
@@ -55,6 +56,8 @@ export class AppService {
     private worker: WorkerService,
     private http: HttpClient
   ) {
+
+    console.log(`VERSION: ${version}`);
 
     this.firebase.onAuthChange.subscribe(authenticated => {
 
