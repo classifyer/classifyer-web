@@ -6,6 +6,7 @@ import { ParseResult, MatchingState, MatchResult } from '@models/common';
 import { Subscription } from 'rxjs';
 import _ from 'lodash';
 import fileSaver from 'file-saver';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
   selector: 'app-application',
@@ -49,6 +50,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   public state: ScreenState = ScreenState.Form;
   public matchingMessage: string = null;
   public matchResult: MatchResult = null;
+  public quickMatch: boolean = false;
   /** Used for styling only when dragging over. */
   public dropboxActive: boolean = false;
   public dropboxDisabled: boolean = false;
@@ -74,7 +76,8 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private app: AppService
+    private app: AppService,
+    private clipboard: ClipboardService
   ) { }
 
   private parseInput() {
@@ -132,6 +135,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
         const handler = () => {
 
           this.matchingAnimation.removeEventListener('complete', handler);
+          this.quickMatch = quickMatch;
           this.matchResult = message.result;
           this.state = ScreenState.Results;
           this.matchingMessage = null;
@@ -279,6 +283,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     this.matchingAnimation = null;
     this.matchingMessage = null;
     this.matchResult = null;
+    this.quickMatch = false;
     this.app.setMenuActive(true);
     this.state = ScreenState.Form;
 
@@ -287,6 +292,13 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   public downloadResults() {
 
     fileSaver.saveAs(new Blob([this.matchResult.csv], { type: 'text/csv;charset=utf-8' }), 'results.csv');
+
+  }
+
+  public copyResults() {
+
+    // Copy the content without headers (if newline detection fails it would fallback to copying the headers)
+    this.clipboard.copyFromContent(this.matchResult.csv.substr(this.matchResult.csv.indexOf('\n') + 1));
 
   }
 

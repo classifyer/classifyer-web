@@ -4,8 +4,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { LottieAnimationViewModule } from 'ng-lottie';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { AppRoutingModule } from './app-routing.module';
+import { ClipboardModule } from 'ngx-clipboard';
+
 import { AppComponent } from './app.component';
 import {
   HeaderComponent,
@@ -32,7 +33,8 @@ import {
     HttpClientModule,
     FormsModule,
     LottieAnimationViewModule.forRoot(),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ClipboardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

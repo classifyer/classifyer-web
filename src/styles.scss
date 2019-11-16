@@ -80,6 +80,19 @@ hr {
   &.btn-group-stretch > * {
     width: 100%;
   }
+  &.btn-group-last-block {
+    flex-wrap: wrap;
+    & > *:not(:last-child) {
+      width: calc(50% - #{rem(15px)});
+      &.no-margin {
+        margin-right: 0;
+        width: 50%;
+      }
+    }
+    & > *:last-child {
+      margin-top: rem(15px);
+    }
+  }
 }
 
 button.btn {

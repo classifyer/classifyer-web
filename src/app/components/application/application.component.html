@@ -78,8 +78,9 @@
     <!-- Matching 1+ Results -->
     <ng-template [ngIf]="state === screenStateEnum.Results && matchResult.count">
       <span @fadeIn class="matching-message">Matched <span class="matching-message-bold">{{ matchResult.count }}</span> literals in <span class="matching-message-bold">{{ roundToDecimal(matchResult.totalTime / 1000, 1) }}</span> seconds</span>
-      <div @fadeIn class="btn-group btn-group-centered btn-group-stretch btn-group-medium">
+      <div @fadeIn class="btn-group btn-group-centered btn-group-stretch btn-group-medium" [ngClass]="{ 'btn-group-last-block': quickMatch }">
         <button class="btn btn-primary" (click)="downloadResults()">Download Results</button>
+        <button *ngIf="quickMatch" class="btn btn-primary no-margin" (click)="copyResults()">Copy To Clipboard</button>
         <button class="btn btn-secondary" (click)="startOver()">Start Over</button>
       </div>
     </ng-template>
