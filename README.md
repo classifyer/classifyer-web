@@ -34,8 +34,9 @@ This is the repository of Classifyer web application.
       "emailServerUrl": "HEROKU_EMAIL_SERVER_URL/send"
     }
     ```
-5. Build the app: `ng build --prod`
-6. Deploy: `firebase deploy`
+5. Version the app by running `npm run version -- 0.0.0` (replace `0.0.0` with your desired version)
+6. Build the app: `ng build --prod`
+7. Deploy: `firebase deploy`
 
 ## Versioning
 
