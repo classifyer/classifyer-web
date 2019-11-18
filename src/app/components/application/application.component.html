@@ -3,7 +3,7 @@
     <!-- Form -->
     <ng-template [ngIf]="state === screenStateEnum.Form">
       <form #f="ngForm" (ngSubmit)="onSubmit(f)">
-        <h1>{{ dictionary.name }}</h1>
+        <h1 class="no-margin">{{ dictionary.name }}</h1>
         <hr>
         <p>Please upload a CSV using the box below:</p>
         <div class="dropbox"
@@ -159,7 +159,7 @@
         		c8.2,4.9,14.9,12.6,21.3,24.8l33.2,63.8L1198,618.7z"/>
         </g>
       </svg>
-      <span class="slogan">Slogan here...</span>
+      <!-- <span class="slogan">Slogan here...</span> -->
     </div>
   </ng-template>
 </div>

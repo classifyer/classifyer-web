@@ -1,6 +1,7 @@
 @import 'util';
 @import 'colors';
 @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap');
 
 html,
 body {
@@ -12,6 +13,24 @@ body {
   background-color: map-get($palette, color-gray-lighter);
   font-family: 'Roboto', sans-serif;
   overflow-x: hidden;
+}
+
+a {
+  color: map-get($palette, color-accent);
+  text-decoration: none;
+  transition: color .2s ease-in-out;
+  &:hover {
+    color: map-get($palette, color-accent-light);
+  }
+}
+
+code {
+  font-family: 'Roboto Mono', monospace;
+  background-color: map-get($palette, color-gray-light);
+  border-radius: rem(3px);
+  margin: 0 rem(5px);
+  padding: rem(1px) rem(8px);
+  font-size: rem(14px);
 }
 
 // Container bottom padding fix for overflow-y
@@ -51,13 +70,18 @@ app-contribute {
 h1 {
   font-size: rem(28px);
   text-transform: uppercase;
-  margin: 0;
   color: map-get($palette, color-accent);
+  margin-top: rem(24px);
+  margin-bottom: 0;
 }
 
 h2 {
   font-size: rem(22px);
   text-transform: uppercase;
+  margin-bottom: 0;
+}
+
+h1.no-margin, h2.no-margin {
   margin: 0;
 }
 
@@ -66,6 +90,10 @@ hr {
   height: rem(1px);
   border: none;
   background-color: map-get($palette, color-gray-medium);
+}
+
+p, ol, ul {
+  line-height: rem(24px);
 }
 
 .btn-group {
