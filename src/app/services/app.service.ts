@@ -5,7 +5,7 @@ import { WorkerService, WebWorker } from './worker.service';
 import { MatchMessage, MatchingState, ParseResult } from '@models/common';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import _ from 'lodash';
-import { version } from '../../environments/version';
+import config from '@config';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +57,7 @@ export class AppService {
     private http: HttpClient
   ) {
 
-    console.log(`VERSION: ${version}`);
+    console.log(`VERSION: ${config.version}`);
 
     this.firebase.onAuthChange.subscribe(authenticated => {
 
@@ -467,6 +467,29 @@ export class AppService {
 
   }
 
+  /**
+  * Sends an email using the email server (from the app config).
+  * @param name The user's name.
+  * @param email The user's email.
+  * @param subject The email's subject.
+  * @param category The email's category.
+  * @param message The email's message/body.
+  */
+  public async sendEmail(name: string, email: string, subject: string, category: ContactReason, message: string): Promise<ServerResponse> {
+
+    return <ServerResponse>await this.http.post(config.emailServerUrl, {
+      name: _.startCase(name.trim().toLowerCase()),
+      email: email.trim(),
+      subject: _.capitalize(subject.trim()),
+      category: category,
+      message: message.trim(),
+      time: Date.now()
+    }, {
+      headers: { 'Content-Type': 'application/json' }
+    }).toPromise();
+    
+  }
+
 }
 
 export interface CategoryDoc {
@@ -508,5 +531,31 @@ export interface PromptResponse {
 
   id: string;
   answer: boolean;
+
+}
+
+export interface ServerErrorResponse {
+
+  error: boolean;
+  code: string;
+  message: string;
+
+}
+
+export interface ServerOkResponse {
+
+  ok: boolean;
+
+}
+
+export type ServerResponse = ServerErrorResponse|ServerOkResponse;
+
+export enum ContactReason {
+
+  GeneralEnquiry = 'General enquiry',
+  Bug = 'Reporting a bug',
+  Request = 'Feature request',
+  Contribution = 'Help with contribution',
+  Other = 'Other'
 
 }

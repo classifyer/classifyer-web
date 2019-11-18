@@ -14,7 +14,9 @@ lock.version = target.trim();
 fs.writeFileSync(path.resolve(__dirname, 'package.json'), JSON.stringify(package, null, 2), { encoding: 'utf8' });
 fs.writeFileSync(path.resolve(__dirname, 'package-lock.json'), JSON.stringify(lock, null, 2), { encoding: 'utf8' });
 
-// Update/generate ./src/environments/version.ts
-const content = `// This file has been generated automatically, do not change it manually!\nexport const version: string = '${target.trim()}';`;
+// Update app config
+const config = require(path.resolve(__dirname, 'src', 'app', 'app.config.json'));
 
-fs.writeFileSync(path.resolve(__dirname, './src/environments/version.ts'), content, { encoding: 'utf8' });
+config.version = target.trim();
+
+fs.writeFileSync(path.resolve(__dirname, './src/app/app.config.json'), JSON.stringify(config, null, 2), { encoding: 'utf8' });

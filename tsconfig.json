@@ -25,7 +25,8 @@
       "@services/*": ["src/app/services/*.service"],
       "@models/*": ["src/app/models/*.model"],
       "@components": ["src/app/components"],
-      "@guards/*": ["src/app/guards/*.guard"]
+      "@guards/*": ["src/app/guards/*.guard"],
+      "@config": ["src/app/app.config.json"]
     }
   },
   "angularCompilerOptions": {
