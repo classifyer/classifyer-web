@@ -1,9 +1,25 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
+  	// Dictionary documents
+    match /dictionaries/{dicId} {
       allow read: if request.auth != null;
       allow write: if false;
+    }
+  	// Category documents
+    match /categories/{catId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    // File documents
+    match /files/{fileId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+    // Email documents
+    match /emails/{userId} {
+    	allow read, update, delete: if false;
+      allow create: if request.auth != null && request.auth.uid == userId;
     }
   }
 }
