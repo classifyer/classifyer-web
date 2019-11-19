@@ -32,7 +32,7 @@
             <option *ngFor="let header of csvHeaders" [value]="header">{{ header.substr(0, header.length - 1) }}</option>
           </select>
         </div>
-        <p>Or provide a list of plain literals separated by new lines:</p>
+        <p>Or provide a list of plain literals separated by new lines (50 max):</p>
         <textarea #plainLiteralsController name="plainLiterals" ngModel required [disabled]="selectedFile" data-gramm_editor="false" linelimiter="50"></textarea>
         <div class="btn-group btn-group-right">
           <button [disabled]="f.invalid || formDisabled" type="submit" class="btn btn-primary">Start Matching</button>
