@@ -21,6 +21,9 @@ import {
   WhatHappensAfterComponent
 } from '@components';
 
+import { LineLimiterValidator } from '@validators/linelimiter';
+import { StrictEmailValidator } from '@validators/strictemail';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +36,9 @@ import {
     ContactComponent,
     WhenToContributeComponent,
     HowToContributeComponent,
-    WhatHappensAfterComponent
+    WhatHappensAfterComponent,
+    LineLimiterValidator,
+    StrictEmailValidator
   ],
   imports: [
     BrowserModule,

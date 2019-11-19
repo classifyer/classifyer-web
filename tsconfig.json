@@ -26,6 +26,7 @@
       "@models/*": ["src/app/models/*.model"],
       "@components": ["src/app/components"],
       "@guards/*": ["src/app/guards/*.guard"],
+      "@validators/*": ["src/app/validators/*.validator"],
       "@config": ["src/app/app.config.json"]
     }
   },
