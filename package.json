@@ -5,7 +5,7 @@
   "contributors": [
     "Ashkan Ashkpour <ashkan.ashkpour@chiselpowered.com>"
   ],
-  "version": "0.1.0",
+  "version": "0.1.1",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/classifyer/classifyer-web.git"
@@ -22,7 +22,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "version": "node version.js"
+    "version": "node version.js",
+    "deploy": "ng build --prod && firebase deploy --only hosting"
   },
   "dependencies": {
     "@angular/animations": "~8.2.13",

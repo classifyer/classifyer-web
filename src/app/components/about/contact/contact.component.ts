@@ -67,6 +67,7 @@ export class ContactComponent implements OnInit {
 
         this.error = false;
         this.message = 'Thank you for your message. We will get back to you shortly.';
+        form.reset();
 
       }
 
