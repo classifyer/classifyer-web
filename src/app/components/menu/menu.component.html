@@ -1,15 +1,39 @@
-<div class="container" [ngClass]="{ loading: loading }">
-  <lottie-animation-view *ngIf="loading" [options]="lottieConfig" width="50" height="50">
-  </lottie-animation-view>
-  <ng-template [ngIf]="! loading">
-    <div @fadeInOut class="category-container" *ngFor="let category of categories">
-      <span class="category-title">{{ category.name }}</span>
-      <span class="classification"
-      *ngFor="let dictionary of getDictionariesOfCategory(category.id)"
-      [ngClass]="{ active: activeDictionary === dictionary.id, enabled: enabled }"
-      (click)="activateDictionary(dictionary.id, $event)">
-        <span class="classification-name">{{ dictionary.name }}</span>
-        <span class="classification-lang">{{ dictionary.language }}</span>
+<div class="container" [ngClass]="{ loading: loading && currentTab === 'app' }">
+  <ng-template [ngIf]="currentTab === 'app'">
+    <lottie-animation-view *ngIf="loading" [options]="lottieConfig" width="50" height="50">
+    </lottie-animation-view>
+    <ng-template [ngIf]="! loading">
+      <div class="category-container" *ngFor="let category of categories">
+        <span class="category-title">{{ category.name }}</span>
+        <span class="classification"
+        *ngFor="let dictionary of getDictionariesOfCategory(category.id)"
+        [ngClass]="{ active: activeDictionary === dictionary.id, enabled: enabled }"
+        (click)="activateDictionary(dictionary.id, $event)">
+          <span class="classification-name">{{ dictionary.name }}</span>
+          <span class="classification-lang">{{ dictionary.language }}</span>
+        </span>
+      </div>
+    </ng-template>
+  </ng-template>
+  <ng-template [ngIf]="currentTab === 'contribute'">
+    <div class="menu-container">
+      <span class="menu-title">Contribute</span>
+      <span class="menu-item" routerLinkActive="active" routerLink="/contribute/when-to-contribute">
+        <span class="menu-item-name">When to contribute</span>
+      </span>
+      <span class="menu-item" routerLinkActive="active" routerLink="/contribute/how-to-contribute">
+        <span class="menu-item-name">How to contribute</span>
+      </span>
+      <span class="menu-item" routerLinkActive="active" routerLink="/contribute/what-happens-after">
+        <span class="menu-item-name">What happens after</span>
+      </span>
+    </div>
+  </ng-template>
+  <ng-template [ngIf]="currentTab === 'about'">
+    <div class="menu-container">
+      <span class="menu-title">About</span>
+      <span (click)="menuLinkClicked($event)" class="menu-item" routerLinkActive="active" routerLink="/about/contact">
+        <span class="menu-item-name">Contact</span>
       </span>
     </div>
   </ng-template>

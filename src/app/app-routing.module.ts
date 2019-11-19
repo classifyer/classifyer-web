@@ -3,7 +3,11 @@ import { Routes, RouterModule } from '@angular/router';
 import {
   ApplicationComponent,
   ContributeComponent,
-  AboutComponent
+  AboutComponent,
+  ContactComponent,
+  WhenToContributeComponent,
+  HowToContributeComponent,
+  WhatHappensAfterComponent
 } from '@components';
 
 import { CanCancelMatching } from '@guards/matching';
@@ -11,8 +15,16 @@ import { CanCancelMatching } from '@guards/matching';
 
 const routes: Routes = [
   { path: 'app', component: ApplicationComponent, canDeactivate: [CanCancelMatching] },
-  { path: 'contribute', component: ContributeComponent },
-  { path: 'about', component: AboutComponent },
+  { path: 'contribute', component: ContributeComponent, children: [
+    { path: '', pathMatch: 'full', redirectTo: 'when-to-contribute' },
+    { path: 'when-to-contribute', component: WhenToContributeComponent },
+    { path: 'how-to-contribute', component: HowToContributeComponent },
+    { path: 'what-happens-after', component: WhatHappensAfterComponent }
+  ]},
+  { path: 'about', component: AboutComponent, children: [
+    { path: '', pathMatch: 'full', redirectTo: 'contact' },
+    { path: 'contact', component: ContactComponent }
+  ]},
   { path: '**', redirectTo: '/app' }
 ];
 

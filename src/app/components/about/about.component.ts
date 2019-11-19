@@ -1,21 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { AppService } from '@services/app';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-about',
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss']
 })
-export class AboutComponent implements OnInit {
+export class AboutComponent {
 
-  constructor(
-    private app: AppService
-  ) { }
-
-  ngOnInit() {
-
-    this.app.setMenuActive(false);
-
-  }
+  constructor() { }
 
 }

@@ -1,19 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { AppService, CategoryDoc, DictionaryDoc } from '@services/app';
-import { trigger, transition, state, style, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.scss'],
-  animations: [
-    trigger('fadeInOut', [
-      state('void', style({
-        opacity: 0
-      })),
-      transition('void<=>*', animate(200))
-    ])
-  ]
+  styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
 
@@ -23,6 +15,7 @@ export class MenuComponent implements OnInit {
   public loading: boolean = true;
   public enabled: boolean = true;
   public opened: boolean = true;
+  public currentTab: string = '';
   public lottieConfig = {
     path: '/assets/spinner-white.json',
     autoplay: true,
@@ -30,10 +23,20 @@ export class MenuComponent implements OnInit {
   };
 
   constructor(
-    private app: AppService
+    private app: AppService,
+    private router: Router
   ) { }
 
   ngOnInit() {
+
+    this.router.events.subscribe(event => {
+
+      if ( ! (event instanceof NavigationEnd) ) return;
+
+      // Switch menu content based on top level route
+      this.currentTab = (new URL(`http://localhost${event.urlAfterRedirects}`)).pathname.split('/')[1];
+
+    });
 
     this.app.onMenuAccessibilityChanged.subscribe(opened => {
 
@@ -71,6 +74,20 @@ export class MenuComponent implements OnInit {
     this.app.onSetViewToForm.next();
     this.app.selectDictionary(id);
     this.activeDictionary = this.app.selectedDictionary;
+
+    if ( this.app.breakpointActive ) {
+
+      this.app.closeMenu(true);
+      event.preventDefault();
+      event.stopPropagation();
+
+    }
+
+  }
+
+  public menuLinkClicked(event: MouseEvent) {
+
+    if ( ! this.enabled || ! this.opened ) return;
 
     if ( this.app.breakpointActive ) {
 

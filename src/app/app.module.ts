@@ -14,7 +14,11 @@ import {
   ContributeComponent,
   AboutComponent,
   ApplicationComponent,
-  PromptComponent
+  PromptComponent,
+  ContactComponent,
+  WhenToContributeComponent,
+  HowToContributeComponent,
+  WhatHappensAfterComponent
 } from '@components';
 
 @NgModule({
@@ -25,7 +29,11 @@ import {
     ContributeComponent,
     AboutComponent,
     ApplicationComponent,
-    PromptComponent
+    PromptComponent,
+    ContactComponent,
+    WhenToContributeComponent,
+    HowToContributeComponent,
+    WhatHappensAfterComponent
   ],
   imports: [
     BrowserModule,
