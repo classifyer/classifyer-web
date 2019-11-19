@@ -229,3 +229,34 @@ select {
   background-color: map-get($palette, color-gray-lighter-transparent);
   backdrop-filter: blur(10px);
 }
+
+table {
+  width: 100%;
+  border-spacing: 0;
+  th {
+    text-align: left;
+    padding: rem(10px);
+    font-weight: bold;
+    font-size: rem(18px);
+    border-bottom: rem(2px) solid map-get($palette, color-gray-medium);
+  }
+  td {
+    padding: rem(10px);
+    &:first-child {
+      border-top-left-radius: rem(3px);
+      border-bottom-left-radius: rem(3px);
+    }
+    &:last-child {
+      border-top-right-radius: rem(3px);
+      border-bottom-right-radius: rem(3px);
+    }
+  }
+  tbody:before {
+    content: ' ';
+    display: block;
+    height: rem(10px);
+  }
+  tbody tr:nth-child(even) td {
+    background-color: map-get($palette, color-gray-light);
+  }
+}
