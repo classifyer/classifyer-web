@@ -15,3 +15,37 @@
     flex-shrink: 0;
   }
 }
+
+form {
+  width: 100%;
+  max-width: rem(800px);
+  align-self: center;
+  margin-top: rem(20px);
+  .form-message {
+    display: flex;
+    align-items: center;
+    overflow-y: hidden;
+    padding: rem(10px);
+    border-radius: rem(3px);
+    border: rem(1px) solid map-get($palette, color-success-medium);
+    color: map-get($palette, color-success-dark);
+    background-color: map-get($palette, color-success-light);
+    svg {
+      width: rem(20px);
+      height: rem(20px);
+      margin-left: rem(5px);
+      margin-right: rem(10px);
+      path {
+        fill: map-get($palette, color-success-dark);
+      }
+    }
+    &.error {
+      border-color: map-get($palette, color-danger-medium);
+      color: map-get($palette, color-danger-dark);
+      background-color: map-get($palette, color-danger-light);
+      svg path {
+        fill: map-get($palette, color-danger-dark);
+      }
+    }
+  }
+}

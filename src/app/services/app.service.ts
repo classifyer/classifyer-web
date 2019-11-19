@@ -475,19 +475,19 @@ export class AppService {
   * @param category The email's category.
   * @param message The email's message/body.
   */
-  public async sendEmail(name: string, email: string, subject: string, category: ContactReason, message: string): Promise<ServerResponse> {
+  public async sendEmail(name: string, email: string, subject: string, reason: ContactReason, message: string): Promise<ServerResponse> {
 
     return <ServerResponse>await this.http.post(config.emailServerUrl, {
       name: _.startCase(name.trim().toLowerCase()),
       email: email.trim(),
       subject: _.capitalize(subject.trim()),
-      category: category,
+      reason: reason,
       message: message.trim(),
       time: Date.now()
     }, {
       headers: { 'Content-Type': 'application/json' }
     }).toPromise();
-    
+
   }
 
 }
@@ -536,6 +536,7 @@ export interface PromptResponse {
 
 export interface ServerErrorResponse {
 
+  ok: undefined;
   error: boolean;
   code: string;
   message: string;
@@ -545,6 +546,9 @@ export interface ServerErrorResponse {
 export interface ServerOkResponse {
 
   ok: boolean;
+  error: undefined;
+  code: undefined;
+  message: undefined;
 
 }
 

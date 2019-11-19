@@ -2,7 +2,7 @@
   <ng-template [ngIf]="dictionary">
     <!-- Form -->
     <ng-template [ngIf]="state === screenStateEnum.Form">
-      <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <form #f="ngForm" (ngSubmit)="onSubmit(f)" class="application-form">
         <h1 class="no-margin">{{ dictionary.name }}</h1>
         <hr>
         <p>Please upload a CSV using the box below:</p>
@@ -34,7 +34,7 @@
         </div>
         <p>Or provide a list of plain literals separated by new lines:</p>
         <textarea #plainLiteralsController name="plainLiterals" ngModel required [disabled]="selectedFile" data-gramm_editor="false"></textarea>
-        <div class="btn-group">
+        <div class="btn-group btn-group-right">
           <button [disabled]="f.invalid || formDisabled" type="submit" class="btn btn-primary">Start Matching</button>
         </div>
       </form>

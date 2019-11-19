@@ -56,15 +56,6 @@ span.slogan {
   margin-top: rem(20px);
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-input[type="file"] {
-  display: none;
-}
-
 .csv-headers-container {
   margin: rem(20px) 0;
   display: flex;
@@ -138,7 +129,6 @@ input[type="file"] {
 }
 
 .btn-group {
-  justify-content: flex-end;
   margin-top: rem(20px);
   &.btn-group-medium {
     max-width: rem(600px);

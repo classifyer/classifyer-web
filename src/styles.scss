@@ -108,6 +108,9 @@ p, ol, ul {
   &.btn-group-stretch > * {
     width: 100%;
   }
+  &.btn-group-right {
+    justify-content: flex-end;
+  }
   &.btn-group-last-block {
     flex-wrap: wrap;
     & > *:not(:last-child) {
@@ -169,6 +172,33 @@ button.btn {
   &.btn-block {
     width: 100%;
   }
+  &.btn-icon {
+    display: flex;
+    lottie-animation-view {
+      margin-right: rem(10px);
+    }
+  }
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  border-radius: rem(3px);
+  padding: rem(10px);
+  font-family: 'Roboto', sans-serif;
+  font-size: rem(14px);
+  outline: none;
+  border: 1px solid map-get($palette, color-gray-medium);
+  transition: border-color .2s ease-in-out;
+  &:not(:disabled):hover {
+    border-color: map-get($palette, color-accent);
+  }
+  &:disabled {
+    background-color: map-get($palette, color-gray-light);
+  }
+  &:not(:disabled).ng-touched.ng-invalid {
+    border-color: map-get($palette, color-danger-light);
+  }
 }
 
 textarea {
@@ -186,6 +216,9 @@ textarea {
   }
   &:disabled {
     background-color: map-get($palette, color-gray-light);
+  }
+  &:not(:disabled).ng-touched.ng-invalid {
+    border-color: map-get($palette, color-danger-light);
   }
 }
 
@@ -209,6 +242,7 @@ select {
   background-position: right #{rem(20px)} top 50%;
   transition: background-color .2s ease-in-out;
   color: map-get($palette, color-gray-lightest);
+  border: 1px solid transparent;
   &:not(:disabled):hover {
     background-color: map-get($palette, color-accent-light);
   }
@@ -217,6 +251,7 @@ select {
     background-color: map-get($palette, color-gray-medium-light);
     background-image: url('data:image/svg+xml;charset=utf-8;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDE3LjMgMTQxNy4zIj48cGF0aCBmaWxsPSIjQTFBNkFEIiBkPSJNMTM4Ny4zLDQ3MS4ybC02MDQuOSw2MTguOWMtNDAuNiw0MS41LTEwNy4zLDQxLjUtMTQ3LjksMEwyOS43LDQ3MS4yYy02NC02NS41LTE3LjYtMTc1LjcsNzMuOS0xNzUuN2gxMjA5LjhDMTQwNC45LDI5NS41LDE0NTEuMyw0MDUuNywxMzg3LjMsNDcxLjJ6Ii8+PC9zdmc+');
     color: map-get($palette, color-gray-darkest);
+    border-color: map-get($palette, color-gray-medium);
   }
 }
 
@@ -259,4 +294,16 @@ table {
   tbody tr:nth-child(even) td {
     background-color: map-get($palette, color-gray-light);
   }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  &:not(.application-form) > * {
+    margin: rem(5px) 0;
+  }
+}
+
+input[type="file"] {
+  display: none;
 }
