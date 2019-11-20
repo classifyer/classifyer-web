@@ -71,4 +71,15 @@ export class FirebaseService {
 
   }
 
+  /**
+  * Logs a custom event with possible data in Firebase Analytics.
+  * @param event The event name.
+  * @param data The event data (if any).
+  */
+  public logAnalytics(event: string, data?: any) {
+
+    firebase.analytics().logEvent(event, data);
+
+  }
+
 }

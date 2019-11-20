@@ -41,13 +41,16 @@ export class WebWorker {
   * Listens to messages from the web worker (if using this API, avoid using toPromise).
   * @param cb The callback.
   */
-  public listen<T=any>(cb: (data: T) => void): WebWorker {
+  public listen<T=any>(cb: (error: ErrorEvent|Error, data: T) => void): WebWorker {
 
     this.worker.onmessage = ({ data }) => {
 
-      cb(data);
+      if ( data instanceof Error ) cb(data, null);
+      else cb(null, data);
 
     };
+
+    this.worker.onerror = (error) => cb(error, null);
 
     return this;
 
@@ -67,9 +70,15 @@ export class WebWorker {
   */
   public toPromise<T=any>(): Promise<T> {
 
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
 
-      this.worker.onmessage = ({ data }) => resolve(data);
+      this.worker.onmessage = ({ data }) => {
+
+        if ( data instanceof Error ) reject(data);
+        else resolve(data);
+
+      };
+      this.worker.onerror = (error) => reject(error);
 
     });
 

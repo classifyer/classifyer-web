@@ -27,6 +27,8 @@ export class MatchMessage {
 export interface MatchResult {
 
   count: number;
+  totalCount: number,
+  inputCount: number,
   csv: string;
   tabDelimited?: string;
   downloadTime: number;

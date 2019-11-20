@@ -3,7 +3,14 @@ import { ParseMessageEvent } from '@models/common';
 import csv from 'csvtojson';
 import _ from 'lodash';
 
-addEventListener('message', async (event: ParseMessageEvent) => {
+addEventListener('message', (event: ParseMessageEvent) => {
+
+  main(event)
+  .catch(postMessage);
+
+});
+
+async function main(event: ParseMessageEvent) {
 
   // Parse CSV file
   if ( event.data.csv ) {
@@ -40,4 +47,4 @@ addEventListener('message', async (event: ParseMessageEvent) => {
 
   }
 
-});
+}

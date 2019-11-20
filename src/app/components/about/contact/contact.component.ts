@@ -54,22 +54,11 @@ export class ContactComponent implements OnInit {
     this.sending = true;
 
     this.app.sendEmail(form.value.name, form.value.email, form.value.subject, form.value.reason, form.value.message)
-    .then(response => {
+    .then(() => {
 
-      if ( response.error ) {
-
-        console.error(new Error(response.code + ': ' + response.message));
-        this.error = true;
-        this.message = 'Oops! Something went wrong. Please try again.';
-
-      }
-      else {
-
-        this.error = false;
-        this.message = 'Thank you for your message. We will get back to you shortly.';
-        form.reset();
-
-      }
+      this.error = false;
+      this.message = 'Thank you for your message. We will get back to you shortly.';
+      form.reset();
 
     })
     .catch(error => {

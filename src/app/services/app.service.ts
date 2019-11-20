@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FirebaseService } from './firebase.service';
 import { WorkerService, WebWorker } from './worker.service';
 import { MatchMessage, MatchingState, ParseResult } from '@models/common';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import _ from 'lodash';
 import config from '@config';
+import { UAParser } from 'ua-parser-js';
 
 @Injectable({
   providedIn: 'root'
@@ -100,7 +101,7 @@ export class AppService {
         })
         .catch(error => {
 
-          console.error(error);
+          this.analytics.logErrorReport(error, 'firebase_data_read');
 
           this._categories = [];
           this._dictionaries = [];
@@ -175,11 +176,24 @@ export class AppService {
       parsingTime: parsingTime,
       targetHeader: targetHeader
     })
-    .listen<MatchMessage>(data => {
+    .listen<MatchMessage>((error, data) => {
+
+      // Exception
+      if ( error ) {
+
+        this.analytics.logErrorReport(<Error>error, 'matching_exception_worker');
+        listener.error(<Error>error);
+        matcher.terminate();
+        this._matchingInProgress = false;
+
+        return;
+
+      }
 
       // Error message
       if ( data.state === MatchingState.Error ) {
 
+        this.analytics.logErrorReport(data.error, 'matching_error_worker');
         listener.error(data.error);
         matcher.terminate();
         this._matchingInProgress = false;
@@ -195,6 +209,20 @@ export class AppService {
       // Finish message
       if ( data.state === MatchingState.Finished ) {
 
+        this.analytics.logMatchStatistics(
+          data.result.inputCount,
+          data.result.count,
+          data.result.totalCount,
+          dictionary.name,
+          dictionary.language,
+          quickMatch,
+          Math.round(downloadTimeEnd - downloadTimeStart),
+          data.result.decompressionTime,
+          data.result.parsingInputTime,
+          data.result.parsingOutputTime,
+          data.result.matchingTime,
+          data.result.totalTime
+        );
         listener.complete();
         matcher.terminate();
         this._matchingInProgress = false;
@@ -239,7 +267,12 @@ export class AppService {
     const listener = new BehaviorSubject<MatchMessage>({ state: MatchingState.Started, message: 'Matching your data...' });
 
     this._match(dictionary, input, listener, parsingTime, quickMatch, targetHeader)
-    .catch(listener.error);
+    .catch(error => {
+
+      this.analytics.logErrorReport(error, 'matching_error_promise');
+      listener.error(error);
+
+    });
 
     return listener;
 
@@ -310,7 +343,17 @@ export class AppService {
 
     this._activeWorkers.push(parser);
 
-    return await parser.send({ csv: true, input: input }).toPromise<ParseResult>();
+    try {
+
+      return await parser.send({ csv: true, input: input }).toPromise<ParseResult>();
+
+    }
+    catch (error) {
+
+      this.analytics.logErrorReport(error, 'parsing_csv_exception_worker');
+      throw error;
+
+    }
 
   }
 
@@ -324,7 +367,17 @@ export class AppService {
 
     this._activeWorkers.push(parser);
 
-    return await parser.send({ csv: false, input: input }).toPromise<ParseResult>();
+    try {
+
+      return await parser.send({ csv: false, input: input }).toPromise<ParseResult>();
+
+    }
+    catch (error) {
+
+      this.analytics.logErrorReport(error, 'parsing_plain_exception_worker');
+      throw error;
+
+    }
 
   }
 
@@ -365,8 +418,17 @@ export class AppService {
       // On file read
       reader.onloadend = () => {
 
-        if ( reader.error ) reject(reader.error);
-        else resolve(<string>reader.result);
+        if ( reader.error ) {
+
+          this.analytics.logErrorReport(reader.error, 'file_reader_error');
+          reject(reader.error);
+
+        }
+        else {
+
+          resolve(<string>reader.result);
+
+        }
 
       };
 
@@ -477,16 +539,187 @@ export class AppService {
   */
   public async sendEmail(name: string, email: string, subject: string, reason: ContactReason, message: string): Promise<ServerResponse> {
 
-    return <ServerResponse>await this.http.post(config.emailServerUrl, {
-      name: _.startCase(name.trim().toLowerCase()),
-      email: email.trim(),
-      subject: _.capitalize(subject.trim()),
-      reason: reason,
-      message: message.trim(),
-      time: Date.now()
-    }, {
-      headers: { 'Content-Type': 'application/json' }
-    }).toPromise();
+    try {
+
+      const response = <ServerResponse>await this.http.post(config.emailServerUrl, {
+        name: _.startCase(name.trim().toLowerCase()),
+        email: email.trim(),
+        subject: _.capitalize(subject.trim()),
+        reason: reason,
+        message: message.trim(),
+        time: Date.now()
+      }, {
+        headers: { 'Content-Type': 'application/json' }
+      }).toPromise();
+
+      if ( response.error ) {
+
+        this.analytics.logErrorReport(<any>response, 'email_server_error');
+        throw new Error(response.message);
+
+      }
+
+      return response;
+
+    }
+    catch (error) {
+
+      this.analytics.logErrorReport(error, 'email_exception_error');
+      throw error;
+
+    }
+
+  }
+
+  /**
+  * A Firebase Analytics logger instance.
+  */
+  public analytics = new AnalyticsLogger(window ? (window.navigator ? window.navigator.userAgent : undefined) : undefined, this.firebase);
+
+}
+
+export class AnalyticsLogger {
+
+  private userAgent: IUAParser.IResult = null;
+
+  constructor(
+    userAgent: string,
+    private firebase: FirebaseService
+  ) {
+
+    // Parse user agent
+    this.userAgent = (new UAParser(userAgent)).getResult();
+
+  }
+
+  /**
+  * Returns a new date object with timestamp and local time string.
+  */
+  private getTime() {
+
+    const date = new Date();
+
+    return {
+      time_timestamp: date.getTime(),
+      time_local: date.toString()
+    };
+
+  }
+
+  /**
+  * Flattens the parsed user agent.
+  */
+  private getUserAgent() {
+
+    return {
+      ua_original: this.userAgent.ua,
+      ua_browser_major: this.userAgent.browser.major,
+      ua_browser_name: this.userAgent.browser.name,
+      ua_browser_version: this.userAgent.browser.version,
+      ua_cpu_arch: this.userAgent.cpu.architecture,
+      ua_device_model: this.userAgent.device.model,
+      ua_device_type: this.userAgent.device.type,
+      ua_device_vendor: this.userAgent.device.vendor,
+      ua_engine_name: this.userAgent.engine.name,
+      ua_engine_version: this.userAgent.engine.version,
+      ua_os_name: this.userAgent.os.name,
+      ua_os_version: this.userAgent.os.version
+    };
+
+  }
+
+  /**
+  * Builds a analytics data log object by appending all metadata properties to it.
+  * @param data The data object.
+  */
+  private buildLogObject(data: Object): Object {
+
+    return _.assign(data, this.getTime(), this.getUserAgent());
+
+  }
+
+  /**
+  * Logs an error object.
+  * @param error The error object.
+  * @param notes Developer notes to help with the classification of the error.
+  */
+  public logErrorReport(error: Error, notes?: string) {
+
+    const httpErrorBody: any = {};
+
+    // Unwrap http errors with body
+    if ( error instanceof HttpErrorResponse && error.error ) {
+
+      httpErrorBody.code = error.error.code;
+      httpErrorBody.message = error.error.message;
+
+    }
+
+    const log = {
+      notes: notes,
+      error_message: error.message,
+      error_name: error.name,
+      error_code: (<any>error).code,
+      error_stack: error.stack,
+      error_http_code: httpErrorBody.code,
+      error_http_message: httpErrorBody.message
+    };
+
+    // Limit log name to 200 bytes
+    if ( log.error_name ) log.error_name = log.error_name.substr(0, 200);
+    // Limit log message to 1kb
+    if ( log.error_message ) log.error_message = log.error_message.substr(0, 1000);
+    // Limit log stack to 2kb
+    if ( log.error_stack ) log.error_stack = log.error_stack.substr(0, 2000);
+
+    this.firebase.logAnalytics('error_thrown', this.buildLogObject(log));
+
+  }
+
+  /**
+  * Logs matching statistics.
+  * @param literalsCount The number of literals in the input.
+  * @param literalsMatchedCount The number of literals matched (to one or more classifications).
+  * @param totalMatchesCount The total number of matches.
+  * @param classificationName The name of the classification used.
+  * @param classificationLanguage The language of the classification used.
+  * @param quickMatch Whether quick matching method was used or not.
+  * @param downloadTime The dictionary download time.
+  * @param decompressionTime The dictionary decompression time.
+  * @param parsingInputTime The input parsing time.
+  * @param parsingOutputTime The output parsing time.
+  * @param matchingTime The matching time.
+  * @param totalTime The total operation time.
+  */
+  public logMatchStatistics(
+    literalsCount: number,
+    literalsMatchedCount: number,
+    totalMatchesCount: number,
+    classificationName: string,
+    classificationLanguage: string,
+    quickMatch: boolean,
+    downloadTime: number,
+    decompressionTime: number,
+    parsingInputTime: number,
+    parsingOutputTime: number,
+    matchingTime: number,
+    totalTime: number
+  ) {
+
+    this.firebase.logAnalytics('matching_done', this.buildLogObject({
+      match_literals_count: literalsCount,
+      match_matched_literals_count: literalsMatchedCount,
+      match_matched_total_count: totalMatchesCount,
+      match_class_name: classificationName,
+      match_class_lang: classificationLanguage,
+      match_quick: quickMatch,
+      match_time_download: downloadTime,
+      match_time_inflate: decompressionTime,
+      match_time_parse_input: parsingInputTime,
+      match_time_parse_output: parsingOutputTime,
+      match_time_matching: matchingTime,
+      match_time_total: totalTime
+    }));
 
   }
 

@@ -4,7 +4,17 @@ import _ from 'lodash';
 import { Parser } from 'json2csv';
 import { DictionaryData, DictionaryMapping, MatchMessage, MatchingState, MatchMessageEvent } from '@models/common';
 
-addEventListener('message', async (event: MatchMessageEvent) => {
+addEventListener('message', (event: MatchMessageEvent) => {
+
+  main(event)
+  .catch(postMessage);
+
+});
+
+async function main(event: MatchMessageEvent) {
+
+  // Preserve input length for statistics
+  let inputLength = event.data.input.length;
 
   // Timing variables
   let decompressionTimeStart: number, decompressionTimeEnd: number;
@@ -29,6 +39,7 @@ addEventListener('message', async (event: MatchMessageEvent) => {
   postMessage(new MatchMessage(MatchingState.Matching, 'Matching your literals...'));
 
   const result: DictionaryMapping[][] = [];
+  // Total literals matched to one or more classifications
   let matchCount: number = 0;
 
   // Quick match
@@ -85,6 +96,8 @@ addEventListener('message', async (event: MatchMessageEvent) => {
   let csvHeaders: string[] = [];
   let inputHeadersSet: boolean = false;
   let matchHeaderSet: boolean = false;
+  // Total number of matches found
+  let totalMatchCount: number = 0;
 
   // CSV file input
   if ( ! event.data.quickMatch ) {
@@ -120,6 +133,7 @@ addEventListener('message', async (event: MatchMessageEvent) => {
 
         }
 
+        totalMatchCount++;
         csvData.push(_.assign(match, input));
 
       }
@@ -161,6 +175,7 @@ addEventListener('message', async (event: MatchMessageEvent) => {
 
         }
 
+        totalMatchCount++;
         csvData.push(_.assign(match, { literal: input }));
 
       }
@@ -222,6 +237,8 @@ addEventListener('message', async (event: MatchMessageEvent) => {
     csv: finalCsv,
     tabDelimited: tabDelimited,
     count: matchCount,
+    totalCount: totalMatchCount,
+    inputCount: inputLength,
     downloadTime: event.data.downloadTime,
     decompressionTime: Math.round(decompressionTimeEnd - decompressionTimeStart),
     parsingInputTime: event.data.parsingTime,
@@ -230,4 +247,4 @@ addEventListener('message', async (event: MatchMessageEvent) => {
     totalTime: Math.round(totalTimeEnd - totalTimeStart) + event.data.downloadTime + event.data.parsingTime
   }));
 
-});
+}

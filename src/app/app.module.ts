@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { LottieAnimationViewModule } from 'ng-lottie';
@@ -23,6 +23,8 @@ import {
 
 import { LineLimiterValidator } from '@validators/linelimiter';
 import { StrictEmailValidator } from '@validators/strictemail';
+
+import { GlobalErrorHandler } from '@services/error-handler';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,9 @@ import { StrictEmailValidator } from '@validators/strictemail';
     BrowserAnimationsModule,
     ClipboardModule
   ],
-  providers: [],
+  providers: [
+    { provide: ErrorHandler, useClass: GlobalErrorHandler }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
