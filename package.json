@@ -23,7 +23,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "version": "node version.js",
-    "deploy": "ng build --prod && firebase deploy --only hosting"
+    "deploy": "ng build --prod --stats-json && firebase deploy --only hosting",
+    "bundle-report": "webpack-bundle-analyzer ./dist/classifyer/stats-es2015.json"
   },
   "dependencies": {
     "@angular/animations": "~8.2.13",
@@ -73,6 +74,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
-    "typescript": "~3.5.3"
+    "typescript": "~3.5.3",
+    "webpack-bundle-analyzer": "^3.6.0"
   }
 }
