@@ -45,7 +45,9 @@ async function main(event: MatchMessageEvent) {
   // Quick match
   if ( event.data.quickMatch ) {
 
-    for ( const literal of <string[]>event.data.input ) {
+    for ( let i = 0; i < (<string[]>event.data.input).length; i++ ) {
+
+      let literal = (<string[]>event.data.input)[i];
 
       if ( dictionary[literal] ) {
 
@@ -65,7 +67,9 @@ async function main(event: MatchMessageEvent) {
   // CSV file input
   else {
 
-    for ( const row of event.data.input ) {
+    for ( let i = 0; i < event.data.input.length; i++ ) {
+
+      let row = event.data.input[i];
 
       const literal: string = row[event.data.targetHeader].toLowerCase().trim();
 
@@ -123,7 +127,9 @@ async function main(event: MatchMessageEvent) {
 
       }
 
-      for ( const match of matches ) {
+      for ( let i = 0; i < matches.length; i++ ) {
+
+        let match = matches[i];
 
         // Add match headers
         if ( ! matchHeaderSet ) {
@@ -165,7 +171,9 @@ async function main(event: MatchMessageEvent) {
 
       }
 
-      for ( const match of matches ) {
+      for ( let i = 0; i < matches.length; i++ ) {
+
+        let match = matches[i];
 
         // Add match headers
         if ( ! matchHeaderSet ) {
