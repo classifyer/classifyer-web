@@ -145,7 +145,7 @@ export class AppService {
 
     // Download the mappings file
     const doc = await this.firebase.getDocument(AppService.FILES_COLLECTION, dictionary.mappingFileId);
-    const mappingsFileUrl = await this.firebase.getFileUrl(doc.get('filename'));
+    const mappingsFileUrl = await this.firebase.getFileUrl(`${doc.get('basename')}_v${doc.get('version')}.json.gz`);
     const mappingsCompressed = await this.http.get(mappingsFileUrl, { responseType: 'arraybuffer' }).toPromise();
 
     let downloadTimeEnd: number = performance.now();
@@ -745,7 +745,7 @@ export interface DictionaryDoc {
 
 export interface FileDoc {
 
-  filename: string;
+  basename: string;
   version: number;
   commitId: string;
 
