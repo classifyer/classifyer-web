@@ -56,6 +56,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   /** Used for styling only when dragging over. */
   public dropboxActive: boolean = false;
   public dropboxDisabled: boolean = false;
+  public descriptionExpanded: boolean = false;
   public lottieConfig = {
     path: '/assets/spinner-blue.json',
     autoplay: true,
@@ -163,6 +164,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     // Listen to dictionary selection changes
     this.dictionarySub = this.app.onDictionarySelectionChanged.subscribe(id => {
 
+      this.descriptionExpanded = false;
       this.dictionary = id ? this.app.dictionaries.find(dic => dic.id === id) : null;
 
     });
@@ -178,6 +180,7 @@ export class ApplicationComponent implements OnInit, OnDestroy {
       this.matchingMessage = null;
       this.matchResult = null;
       this.quickMatch = false;
+      this.descriptionExpanded = false;
       this.app.setMenuActive(true);
 
     });
@@ -328,6 +331,18 @@ export class ApplicationComponent implements OnInit, OnDestroy {
     let multiplier = Math.pow(10, precision || 0);
 
     return Math.round(num * multiplier) / multiplier;
+
+  }
+
+  public onExpandDescription() {
+
+    this.descriptionExpanded = true;
+
+  }
+
+  public onShrinkDescription() {
+
+    this.descriptionExpanded = false;
 
   }
 

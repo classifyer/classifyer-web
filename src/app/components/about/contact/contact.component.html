@@ -1,46 +1,48 @@
-<h1>Contact</h1>
-<hr>
-<p>Please fill out all the fields in the following form and we will respond to you as soon as possible.</p>
-<form #f="ngForm" (ngSubmit)="onSubmit(f)">
-  <div @popInOut *ngIf="message" class="form-message" [ngClass]="{ error: error }">
-    <svg *ngIf="error" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-    	viewBox="0 0 512.01 512.01" style="enable-background:new 0 0 512.01 512.01;" xml:space="preserve">
-  		<path d="M256,0C114.833,0,0,114.833,0,256s114.833,256,256,256s256-114.853,256-256S397.167,0,256,0z M256,472.341
-  			c-119.275,0-216.341-97.046-216.341-216.341S136.725,39.659,256,39.659c119.295,0,216.341,97.046,216.341,216.341
-  			S375.275,472.341,256,472.341z"/>
-  		<path d="M256.089,125.909c-11.794,0-21.328,9.534-21.328,21.328v127.968c0,11.794,9.534,21.328,21.328,21.328
-  			c11.794,0,21.328-9.555,21.328-21.328V147.237C277.417,135.443,267.884,125.909,256.089,125.909z"/>
-  		<path d="M275.69,354.524c-1.066-2.773-2.559-5.119-4.479-7.038c-1.066-0.853-2.133-1.92-3.412-2.559
-  			c-1.066-0.853-2.346-1.472-3.626-1.92c-1.28-0.661-2.559-1.066-4.052-1.28c-6.804-1.493-14.29,0.874-19.174,5.759
-  			c-1.92,1.919-3.412,4.266-4.479,7.038c-1.066,2.559-1.706,5.332-1.706,8.105c0,2.773,0.64,5.545,1.706,8.105
-  			c1.066,2.559,2.559,4.905,4.479,7.038c2.133,1.919,4.479,3.412,7.038,4.479c2.559,1.066,5.332,1.706,8.105,1.706
-  			c2.773,0,5.524-0.64,8.083-1.706c2.559-1.066,4.884-2.559,7.038-4.479c1.92-2.133,3.412-4.479,4.479-7.038
-  			c1.066-2.559,1.706-5.332,1.706-8.105C277.396,359.856,276.756,357.083,275.69,354.524z"/>
-    </svg>
-    <svg *ngIf="! error" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-    	viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-      <path d="M256,0C114.833,0,0,114.833,0,256s114.833,256,256,256s256-114.853,256-256S397.167,0,256,0z M256,472.341
-  			c-119.275,0-216.341-97.046-216.341-216.341S136.725,39.659,256,39.659c119.295,0,216.341,97.046,216.341,216.341
-  			S375.275,472.341,256,472.341z"/>
-			<path d="M373.451,166.965c-8.071-7.337-20.623-6.762-27.999,1.348L224.491,301.509l-58.438-59.409
-  			c-7.714-7.813-20.246-7.932-28.039-0.238c-7.813,7.674-7.932,20.226-0.238,28.039l73.151,74.361
-  			c3.748,3.807,8.824,5.929,14.138,5.929c0.119,0,0.258,0,0.377,0.02c5.473-0.119,10.629-2.459,14.297-6.504l135.059-148.722
-  			C382.156,186.854,381.561,174.322,373.451,166.965z"/>
-    </svg>
-    {{ message }}
-  </div>
-  <input [disabled]="sending" type="text" name="name" ngModel placeholder="Full Name" required maxlength="100">
-  <input [disabled]="sending" type="email" name="email" ngModel placeholder="Email" required strictemail maxlength="100">
-  <input [disabled]="sending" type="text" name="subject" ngModel placeholder="Subject" required maxlength="100" minlength="10">
-  <select [disabled]="sending" name="reason" [ngModel]="values(reasons)[0]" required>
-    <option *ngFor="let reason of values(reasons); index as index" [value]="reason">{{ reason }}</option>
-  </select>
-  <textarea [disabled]="sending" name="message" ngModel placeholder="Message" required data-gramm_editor="false" maxlength="1500" minlength="20"></textarea>
-  <div class="btn-group btn-group-right">
-    <button [disabled]="f.invalid || sending" type="submit" class="btn btn-primary btn-icon">
-      <lottie-animation-view @fadeIn *ngIf="sending" [options]="lottieConfig" width="20" height="20">
-      </lottie-animation-view>
-      Submit
-    </button>
-  </div>
-</form>
+<article>
+  <h1>Contact</h1>
+  <hr>
+  <p>Please fill out all the fields in the following form and we will respond to you as soon as possible.</p>
+  <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <div @popInOut *ngIf="message" class="form-message" [ngClass]="{ error: error }">
+      <svg *ngIf="error" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+      	viewBox="0 0 512.01 512.01" style="enable-background:new 0 0 512.01 512.01;" xml:space="preserve">
+    		<path d="M256,0C114.833,0,0,114.833,0,256s114.833,256,256,256s256-114.853,256-256S397.167,0,256,0z M256,472.341
+    			c-119.275,0-216.341-97.046-216.341-216.341S136.725,39.659,256,39.659c119.295,0,216.341,97.046,216.341,216.341
+    			S375.275,472.341,256,472.341z"/>
+    		<path d="M256.089,125.909c-11.794,0-21.328,9.534-21.328,21.328v127.968c0,11.794,9.534,21.328,21.328,21.328
+    			c11.794,0,21.328-9.555,21.328-21.328V147.237C277.417,135.443,267.884,125.909,256.089,125.909z"/>
+    		<path d="M275.69,354.524c-1.066-2.773-2.559-5.119-4.479-7.038c-1.066-0.853-2.133-1.92-3.412-2.559
+    			c-1.066-0.853-2.346-1.472-3.626-1.92c-1.28-0.661-2.559-1.066-4.052-1.28c-6.804-1.493-14.29,0.874-19.174,5.759
+    			c-1.92,1.919-3.412,4.266-4.479,7.038c-1.066,2.559-1.706,5.332-1.706,8.105c0,2.773,0.64,5.545,1.706,8.105
+    			c1.066,2.559,2.559,4.905,4.479,7.038c2.133,1.919,4.479,3.412,7.038,4.479c2.559,1.066,5.332,1.706,8.105,1.706
+    			c2.773,0,5.524-0.64,8.083-1.706c2.559-1.066,4.884-2.559,7.038-4.479c1.92-2.133,3.412-4.479,4.479-7.038
+    			c1.066-2.559,1.706-5.332,1.706-8.105C277.396,359.856,276.756,357.083,275.69,354.524z"/>
+      </svg>
+      <svg *ngIf="! error" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+      	viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+        <path d="M256,0C114.833,0,0,114.833,0,256s114.833,256,256,256s256-114.853,256-256S397.167,0,256,0z M256,472.341
+    			c-119.275,0-216.341-97.046-216.341-216.341S136.725,39.659,256,39.659c119.295,0,216.341,97.046,216.341,216.341
+    			S375.275,472.341,256,472.341z"/>
+  			<path d="M373.451,166.965c-8.071-7.337-20.623-6.762-27.999,1.348L224.491,301.509l-58.438-59.409
+    			c-7.714-7.813-20.246-7.932-28.039-0.238c-7.813,7.674-7.932,20.226-0.238,28.039l73.151,74.361
+    			c3.748,3.807,8.824,5.929,14.138,5.929c0.119,0,0.258,0,0.377,0.02c5.473-0.119,10.629-2.459,14.297-6.504l135.059-148.722
+    			C382.156,186.854,381.561,174.322,373.451,166.965z"/>
+      </svg>
+      {{ message }}
+    </div>
+    <input [disabled]="sending" type="text" name="name" ngModel placeholder="Full Name" required maxlength="100">
+    <input [disabled]="sending" type="email" name="email" ngModel placeholder="Email" required strictemail maxlength="100">
+    <input [disabled]="sending" type="text" name="subject" ngModel placeholder="Subject" required maxlength="100" minlength="10">
+    <select [disabled]="sending" name="reason" [ngModel]="values(reasons)[0]" required>
+      <option *ngFor="let reason of values(reasons); index as index" [value]="reason">{{ reason }}</option>
+    </select>
+    <textarea [disabled]="sending" name="message" ngModel placeholder="Message" required data-gramm_editor="false" maxlength="1500" minlength="20"></textarea>
+    <div class="btn-group btn-group-right">
+      <button [disabled]="f.invalid || sending" type="submit" class="btn btn-primary btn-icon">
+        <lottie-animation-view @fadeIn *ngIf="sending" [options]="lottieConfig" width="20" height="20">
+        </lottie-animation-view>
+        Submit
+      </button>
+    </div>
+  </form>
+</article>

@@ -6,6 +6,7 @@
   padding: rem(50px) rem(30px);
   display: flex;
   flex-direction: column;
+  align-items: center;
   overflow-x: hidden;
   overflow-y: auto;
   *:first-child {
@@ -20,6 +21,8 @@
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  max-width: rem(800px);
+  width: 100%;
   &.center {
     height: 100%;
     justify-content: center;
@@ -30,6 +33,38 @@
   }
   & > * {
     flex-shrink: 0;
+  }
+}
+
+@media(max-width: 1230px) {
+
+  .container {
+    max-width: 100%;
+  }
+
+}
+
+.classification-header {
+  display: flex;
+  align-items: center;
+  svg {
+    width: rem(22px);
+    height: rem(33px);
+    margin-right: rem(10px);
+    cursor: pointer;
+    path {
+      fill: map-get($palette, color-gray-dark);
+      transition: fill .2s ease-in-out;
+    }
+    &:hover path {
+      fill: map-get($palette, color-accent);
+    }
+  }
+  h1 {
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow-x: hidden;
   }
 }
 
@@ -155,4 +190,45 @@ span.matching-message-bold {
   justify-content: center;
   align-items: center;
   margin-bottom: rem(20px);
+}
+
+.description-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  .description {
+    width: 100%;
+    overflow-y: hidden;
+    &:not(.expanded) {
+      max-height: rem(90px);
+      user-select: none;
+    }
+  }
+  .description-fade {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    bottom: 0;
+    background: linear-gradient(0deg, map-get($palette, color-gray-lighter), transparent);
+  }
+}
+
+.expand-description {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  span {
+    color: map-get($palette, color-accent);
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: rem(10px);
+    padding-top: 0;
+    transition: color .2s ease-in-out;
+    &:hover {
+      color: map-get($palette, color-accent-light);
+    }
+  }
 }

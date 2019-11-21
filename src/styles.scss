@@ -79,6 +79,7 @@ h2 {
   font-size: rem(22px);
   text-transform: uppercase;
   margin-bottom: 0;
+  color: map-get($palette, color-gray-black);
 }
 
 h1.no-margin, h2.no-margin {
@@ -202,7 +203,7 @@ input[type="password"] {
 }
 
 textarea {
-  min-height: rem(300px);
+  min-height: rem(200px);
   border-radius: rem(3px);
   padding: rem(10px);
   font-family: 'Roboto', sans-serif;
@@ -306,4 +307,76 @@ form {
 
 input[type="file"] {
   display: none;
+}
+
+article {
+  width: 100%;
+  box-sizing: border-box;
+  max-width: rem(900px);
+  padding: rem(50px);
+  background-color: map-get($palette, color-gray-lightest);
+  box-shadow: 0 3px 20px map-get($palette, color-drop-shadow);
+}
+
+section:not(:first-child) {
+  margin-top: rem(30px);
+}
+
+.github-button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 100%;
+  margin-top: rem(20px);
+  max-width: rem(900px);
+  user-select: none;
+  .github-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: rem(10px);
+    padding-top: rem(20px);
+    cursor: pointer;
+    svg {
+      width: rem(30px);
+      height: rem(30px);
+      margin-right: rem(10px);
+      path {
+        fill: map-get($palette, color-gray-black);
+        transition: fill .2s ease-in-out;
+      }
+    }
+    span {
+      text-transform: uppercase;
+      color: map-get($palette, color-gray-black);
+      transition: color .2s ease-in-out;
+      font-weight: bold;
+      font-size: rem(18px);
+    }
+    &:hover {
+      svg path {
+        fill: map-get($palette, color-accent);
+      }
+      span {
+        color: map-get($palette, color-accent);
+      }
+    }
+  }
+}
+
+@media(max-width: 1360px) {
+
+  article {
+    max-width: 100%;
+    box-shadow: none;
+    padding: 0;
+    background-color: transparent;
+  }
+
+  .github-button-container {
+    border-top: 1px solid map-get($palette, color-gray-medium);
+  }
+
 }
