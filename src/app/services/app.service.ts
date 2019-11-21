@@ -51,6 +51,8 @@ export class AppService {
   public onMatchingCleanup: Subject<void> = new Subject<void>();
   /** Emits when application view needs to switch to Form state. */
   public onSetViewToForm: Subject<void> = new Subject<void>();
+  /** Determines if device is mobile. */
+  public isMobile: boolean = false;
 
   constructor(
     private firebase: FirebaseService,
@@ -60,6 +62,16 @@ export class AppService {
 
     console.log(`VERSION: ${config.version}`);
 
+    // Detect if device is mobile
+    if ( window && window.navigator && window.navigator.userAgent ) {
+
+      const info = (new UAParser(window.navigator.userAgent)).getDevice();
+
+      this.isMobile = info && typeof info.type === 'string' && info.type.toLowerCase().trim() === 'mobile';
+
+    }
+
+    // Subscribe to auth changes for loading the data
     this.firebase.onAuthChange.subscribe(authenticated => {
 
       // If authenticated, load the dictionaries and categories

@@ -1,7 +1,25 @@
-<app-header></app-header>
-<div class="main-container">
-  <app-menu (click)="onMenuClicked()" [ngClass]="{ closed: ! menuOpened, active: ! menuOpened && app.breakpointActive }"></app-menu>
-  <router-outlet></router-outlet>
-</div>
-<app-prompt #prompt></app-prompt>
-<div @fadeInOut *ngIf="menuOpened && app.breakpointActive" class="menu-blur" (click)="onBlurClick()"></div>
+<ng-template [ngIf]="! app.isMobile">
+  <app-header></app-header>
+  <div class="main-container">
+    <app-menu (click)="onMenuClicked()" [ngClass]="{ closed: ! menuOpened, active: ! menuOpened && app.breakpointActive }"></app-menu>
+    <router-outlet></router-outlet>
+  </div>
+  <app-prompt #prompt></app-prompt>
+  <div @fadeInOut *ngIf="menuOpened && app.breakpointActive" class="menu-blur" (click)="onBlurClick()"></div>
+</ng-template>
+<ng-template [ngIf]="app.isMobile">
+  <div class="mobile-container">
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    	 viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
+    	<polygon style="fill:#EFEFEF;" points="343.3,334.6 82.9,334.6 152.9,200.2 187.5,133.6 187.6,133.7 296,273.6 	"/>
+    	<path style="fill:#EFEFEF;" d="M917.1,0.5l-294.8,566L517.7,767.4l-79.8,153.2c-47.4,90.9-117.2,78.9-250.4,78.9l208.9-401
+    		l16.6-31.9l4.9-9.3l72.6-139.4l27.1-52.1l6.6-12.7L666.8,79.4C714.1-11.5,769.6,0.5,917.1,0.5z"/>
+    	<polygon style="fill:#E2E2E2;" points="517.7,767.4 396.4,598.5 413.1,566.5 417.9,557.2 	"/>
+    	<polygon style="fill:#E2E2E2;" points="336.4,334.6 258.2,334.6 187.6,133.7 296,273.6 	"/>
+    	<path style="fill:#FFFFFF;" d="M622.3,566.5L517.7,767.4L413.1,566.5L281.5,313.9l-93.9-180.3l0,0h0c100,0,157.7-5.5,199.3,19.2
+    		c19.7,11.8,35.8,30.4,51.1,59.6l79.8,153.2L622.3,566.5z"/>
+    </svg>
+    <span>Classifyer is not available on mobile devices!</span>
+    <span>Please use a desktop computer instead.</span>
+  </div>
+</ng-template>

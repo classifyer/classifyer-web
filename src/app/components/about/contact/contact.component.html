@@ -32,7 +32,7 @@
     </div>
     <input [disabled]="sending" type="text" name="name" ngModel placeholder="Full Name" required maxlength="100">
     <input [disabled]="sending" type="email" name="email" ngModel placeholder="Email" required strictemail maxlength="100">
-    <input [disabled]="sending" type="text" name="subject" ngModel placeholder="Subject" required maxlength="100" minlength="10">
+    <input [disabled]="sending" type="text" name="subject" ngModel placeholder="Subject" required maxlength="100" minlength="5">
     <select [disabled]="sending" name="reason" [ngModel]="values(reasons)[0]" required>
       <option *ngFor="let reason of values(reasons); index as index" [value]="reason">{{ reason }}</option>
     </select>
