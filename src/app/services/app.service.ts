@@ -53,6 +53,8 @@ export class AppService {
   public onSetViewToForm: Subject<void> = new Subject<void>();
   /** Determines if device is mobile. */
   public isMobile: boolean = false;
+  /** Determines if browser is IE. */
+  public isIE: boolean = true;
 
   constructor(
     private firebase: FirebaseService,
@@ -62,12 +64,16 @@ export class AppService {
 
     console.log(`VERSION: ${config.version}`);
 
-    // Detect if device is mobile
     if ( window && window.navigator && window.navigator.userAgent ) {
 
-      const info = (new UAParser(window.navigator.userAgent)).getDevice();
+      const ua = (new UAParser(window.navigator.userAgent));
+      const device = ua.getDevice();
+      const browser = ua.getBrowser();
 
-      this.isMobile = info && typeof info.type === 'string' && info.type.toLowerCase().trim() === 'mobile';
+      // Detect if device is mobile
+      this.isMobile = device && typeof device.type === 'string' && device.type.toLowerCase().trim() === 'mobile';
+      // Detect is browser is IE
+      this.isIE = browser && typeof browser.name === 'string' && browser.name.toUpperCase().trim() === 'IE';
 
     }
 
