@@ -209,7 +209,7 @@ span.matching-message-bold {
     height: 100%;
     position: absolute;
     bottom: 0;
-    background: linear-gradient(0deg, map-get($palette, color-gray-lighter), transparent);
+    background: linear-gradient(0deg, map-get($palette, color-gray-lighter), rgba(255, 255, 255, 0.01));
   }
 }
 

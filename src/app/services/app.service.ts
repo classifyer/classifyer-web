@@ -54,7 +54,7 @@ export class AppService {
   /** Determines if device is mobile. */
   public isMobile: boolean = false;
   /** Determines if browser is IE. */
-  public isIE: boolean = true;
+  public isIE: boolean = false;
 
   constructor(
     private firebase: FirebaseService,
