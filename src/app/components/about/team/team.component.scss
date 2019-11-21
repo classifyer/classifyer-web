@@ -5,6 +5,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   align-items: center;
   *:first-child {
     margin-top: 0;
