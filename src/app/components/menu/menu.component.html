@@ -32,6 +32,9 @@
   <ng-template [ngIf]="currentTab === 'about'">
     <div class="menu-container">
       <span class="menu-title">About</span>
+      <span (click)="menuLinkClicked($event)" class="menu-item" routerLinkActive="active" routerLink="/about/team">
+        <span class="menu-item-name">Our Team</span>
+      </span>
       <span (click)="menuLinkClicked($event)" class="menu-item" routerLinkActive="active" routerLink="/about/contact">
         <span class="menu-item-name">Contact</span>
       </span>

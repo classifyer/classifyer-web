@@ -18,7 +18,8 @@ import {
   ContactComponent,
   WhenToContributeComponent,
   HowToContributeComponent,
-  WhatHappensAfterComponent
+  WhatHappensAfterComponent,
+  TeamComponent
 } from '@components';
 
 import { LineLimiterValidator } from '@validators/linelimiter';
@@ -40,7 +41,8 @@ import { GlobalErrorHandler } from '@services/error-handler';
     HowToContributeComponent,
     WhatHappensAfterComponent,
     LineLimiterValidator,
-    StrictEmailValidator
+    StrictEmailValidator,
+    TeamComponent
   ],
   imports: [
     BrowserModule,

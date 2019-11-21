@@ -19,6 +19,10 @@ export class AppService {
   private static readonly CATEGORIES_COLLECTION: string = 'categories';
   /** Files collection name. */
   private static readonly FILES_COLLECTION: string = 'files';
+  /** Contributors list collection name. */
+  private static readonly CONTRIBUTORS_COLLECTION: string = 'contributors';
+  /** Contributors list document ID. */
+  private static readonly CONTRIBUTORS_LIST_DOCUMENT: string = 'list';
   private _categories: CategoryDoc[] = [];
   private _dictionaries: DictionaryDoc[] = [];
   private _dataAvailable: boolean = false;
@@ -31,6 +35,7 @@ export class AppService {
   private _keepOpened: boolean = false;
   private _breakpointActive: boolean = false;
   private _needsCleanup: boolean = false;
+  private _cachedContributors: string = null;
 
   /** Responsive breakpoint for minimal menu. */
   static readonly MENU_BREAKPOINT: number = 992;
@@ -586,6 +591,22 @@ export class AppService {
       throw error;
 
     }
+
+  }
+
+  /**
+  * Retrieves the contributors list from Firestore.
+  */
+  public async getContributorsList(): Promise<string> {
+
+    // Return the cached value if it exists
+    if ( this._cachedContributors ) return this._cachedContributors;
+
+    const doc = await this.firebase.getDocument(AppService.CONTRIBUTORS_COLLECTION, AppService.CONTRIBUTORS_LIST_DOCUMENT);
+
+    this._cachedContributors = doc.exists ? doc.get('html') : null;
+
+    return this._cachedContributors;
 
   }
 

@@ -1,0 +1,64 @@
+@import '../../../../colors';
+@import '../../../../util';
+
+:host {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  *:first-child {
+    margin-top: 0;
+  }
+  *:last-child {
+    margin-bottom: 0;
+  }
+  & > * {
+    flex-shrink: 0;
+  }
+}
+
+.contributors-loading {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: rem(20px) 0;
+}
+
+.team-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: rem(20px) 0;
+  .team-personnel {
+    width: 100%;
+    max-width: rem(500px);
+    display: flex;
+    align-items: center;
+    &:not(:first-child) {
+      margin-top: rem(30px);
+    }
+    img {
+      width: rem(100px);
+      height: rem(100px);
+      border-radius: 50%;
+      margin-right: rem(20px);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.13);
+    }
+    .team-personnel-info {
+      display: flex;
+      flex-direction: column;
+      span.name {
+        font-weight: bold;
+        font-size: rem(20px);
+        color: map-get($palette, color-accent);
+      }
+      span.title {
+        margin-top: rem(10px);
+      }
+    }
+  }
+}

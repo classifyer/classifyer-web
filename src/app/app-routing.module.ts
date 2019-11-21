@@ -4,6 +4,7 @@ import {
   ApplicationComponent,
   ContributeComponent,
   AboutComponent,
+  TeamComponent,
   ContactComponent,
   WhenToContributeComponent,
   HowToContributeComponent,
@@ -22,7 +23,8 @@ const routes: Routes = [
     { path: 'what-happens-after', component: WhatHappensAfterComponent }
   ]},
   { path: 'about', component: AboutComponent, children: [
-    { path: '', pathMatch: 'full', redirectTo: 'contact' },
+    { path: '', pathMatch: 'full', redirectTo: 'team' },
+    { path: 'team', component: TeamComponent },
     { path: 'contact', component: ContactComponent }
   ]},
   { path: '**', redirectTo: '/app' }

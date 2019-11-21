@@ -1,0 +1,47 @@
+<article>
+  <section>
+    <h1>Our Team</h1>
+    <hr>
+    <div class="team-container">
+      <div class="team-personnel">
+        <img src="/assets/ashkan-ashkpour.png">
+        <div class="team-personnel-info">
+          <span class="name">Dr. Ashkan Ashkpour</span>
+          <span class="title">Principal Investigator, Researcher, Data Architect</span>
+        </div>
+      </div>
+      <div class="team-personnel">
+        <img src="/assets/ramtin-soltani.jpg">
+        <div class="team-personnel-info">
+          <span class="name">Ramtin Soltani</span>
+          <span class="title">Fullstack Developer, Data Engineer, UI/UX Designer</span>
+        </div>
+      </div>
+      <div class="team-personnel">
+        <img src="/assets/kees-mandemakers.jpg">
+        <div class="team-personnel-info">
+          <span class="name">Prof. Dr. Kees Mandemakers</span>
+          <span class="title">Researcher, Data Provider, Adviser</span>
+        </div>
+      </div>
+      <div class="team-personnel">
+        <img src="/assets/ehsan-hashemi.jpg">
+        <div class="team-personnel-info">
+          <span class="name">Ehsan Hashemi</span>
+          <span class="title">UI Designer</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section>
+    <h1>Contributors</h1>
+    <hr>
+    <p>The following contributors have greatly improved the matching results of the platform through their generous contributions to the <a href="https://github.com/classifyer/classifyer-data" target="_blank">data repository</a>:</p>
+    <div class="contributors-loading" *ngIf="! contributors">
+      <lottie-animation-view *ngIf="loading" [options]="lottieConfig" width="50" height="50">
+      </lottie-animation-view>
+      <p *ngIf="! loading">Oops! We seem to have a problem loading the contributors list right now. Please reload the page and try again.</p>
+    </div>
+    <div *ngIf="contributors" [innerHTML]="contributors"></div>
+  </section>
+</article>

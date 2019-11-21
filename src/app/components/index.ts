@@ -8,3 +8,4 @@ export * from './contribute/what-happens-after/what-happens-after.component';
 export * from './application/application.component';
 export * from './prompt/prompt.component';
 export * from './about/contact/contact.component';
+export * from './about/team/team.component';
