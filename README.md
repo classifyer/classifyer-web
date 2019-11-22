@@ -1,6 +1,6 @@
 # Classifyer
 
-This is the repository of Classifyer web application.
+This is the repository of [Classifyer web application](https://classifyer.app).
 
 ## Project Setup
 
