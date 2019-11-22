@@ -289,7 +289,7 @@ export class AppService {
   * @param categoryId The category ID.
   */
   public getDictionariesByCategory(categoryId: string): DictionaryDoc[] {
-console.log('Called')
+
     return this._dictionaries
     .filter(dictionary => dictionary.categoryId === categoryId)
     // Sort alphabetically
