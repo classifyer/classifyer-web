@@ -1,0 +1,27 @@
+Sitemap: https://classifyer.app/sitemap.xml
+
+User-agent: Googlebot
+User-agent: Googlebot-Image
+User-agent: bingbot
+User-agent: Slurp
+User-agent: Yahoo Link Preview
+User-agent: facebookexternalhit
+User-agent: TelegramBot
+User-agent: TwitterBot
+User-agent: LinkedInBot
+User-agent: msnbot
+User-agent: WhatsApp
+User-agent: Slackbot
+User-agent: Slack-ImgProxy
+User-agent: redditbot
+User-agent: DuckDuckBot
+User-agent: Baiduspider
+User-agent: Applebot
+User-agent: Yandexbot
+Allow: /
+
+User-agent: *
+Allow: /favicon.ico
+
+User-agent: *
+Disallow: /
