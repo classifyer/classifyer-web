@@ -3,10 +3,10 @@
     <lottie-animation-view *ngIf="loading" [options]="lottieConfig" width="50" height="50">
     </lottie-animation-view>
     <ng-template [ngIf]="! loading">
-      <div class="category-container" *ngFor="let category of categories">
-        <span class="category-title">{{ category.name }}</span>
+      <div class="category-container" *ngFor="let group of menuData">
+        <span class="category-title">{{ group.category.name }}</span>
         <span class="classification"
-        *ngFor="let dictionary of getDictionariesOfCategory(category.id)"
+        *ngFor="let dictionary of group.dictionaries"
         [ngClass]="{ active: activeDictionary === dictionary.id, enabled: enabled }"
         (click)="activateDictionary(dictionary.id, $event)">
           <span class="classification-name">{{ dictionary.name }}</span>

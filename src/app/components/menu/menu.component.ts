@@ -9,8 +9,7 @@ import { AppService, CategoryDoc, DictionaryDoc } from '@services/app';
 })
 export class MenuComponent implements OnInit {
 
-  public categories: CategoryDoc[] = [];
-  public dictionaries: DictionaryDoc[] = [];
+  public menuData: GroupedDictionaries[] = [];
   public activeDictionary: string = null;
   public loading: boolean = true;
   public enabled: boolean = true;
@@ -47,8 +46,18 @@ export class MenuComponent implements OnInit {
     this.app.onDataChange.subscribe(available => {
 
       this.loading = ! available;
-      this.categories = available ? this.app.categories : [];
-      this.dictionaries = available ? this.app.dictionaries : [];
+      this.menuData = [];
+
+      if ( ! available ) return;
+
+      for ( let category of this.app.categories ) {
+
+        this.menuData.push({
+          category: category,
+          dictionaries: this.app.getDictionariesByCategory(category.id)
+        });
+
+      }
 
     });
 
@@ -62,7 +71,7 @@ export class MenuComponent implements OnInit {
 
   public getDictionariesOfCategory(id: string): DictionaryDoc[] {
 
-    return this.dictionaries.filter(dictionary => dictionary.categoryId === id);
+    return this.app.getDictionariesByCategory(id);
 
   }
 
@@ -98,5 +107,12 @@ export class MenuComponent implements OnInit {
     }
 
   }
+
+}
+
+export interface GroupedDictionaries {
+
+  category: CategoryDoc;
+  dictionaries: DictionaryDoc[];
 
 }

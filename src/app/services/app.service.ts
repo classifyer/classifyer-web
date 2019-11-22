@@ -99,10 +99,15 @@ export class AppService {
               language: doc.get('language'),
               description: doc.get('description'),
               mappingFileId: doc.get('mappingFileId'),
-              categoryId: doc.get('categoryId')
+              categoryId: doc.get('categoryId'),
+              order: doc.get('order') || 0
             };
 
-          });
+          })
+          // Sort alphabetically
+          .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
+          // Sort by order number
+          .sort((a, b) => b.order - a.order);
 
           return this.firebase.getAllDocuments(AppService.CATEGORIES_COLLECTION);
 
@@ -113,10 +118,15 @@ export class AppService {
 
             return {
               id: doc.id,
-              name: doc.get('name')
+              name: doc.get('name'),
+              order: doc.get('order') || 0
             };
 
-          });
+          })
+          // Sort alphabetically
+          .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
+          // Sort by order number (descending)
+          .sort((a, b) => b.order - a.order);
 
           this._dataAvailable = true;
           this.onDataChange.next(this._dataAvailable);
@@ -271,6 +281,21 @@ export class AppService {
   public get dictionaries(): DictionaryDoc[] {
 
     return _.cloneDeep(this._dictionaries);
+
+  }
+
+  /**
+  * Returns the last cached dictionaries by category.
+  * @param categoryId The category ID.
+  */
+  public getDictionariesByCategory(categoryId: string): DictionaryDoc[] {
+console.log('Called')
+    return this._dictionaries
+    .filter(dictionary => dictionary.categoryId === categoryId)
+    // Sort alphabetically
+    .sort((a, b) => a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }))
+    // Sort by order number
+    .sort((a, b) => b.order - a.order);;
 
   }
 
@@ -768,6 +793,7 @@ export interface CategoryDoc {
 
   id: string;
   name: string;
+  order?: number;
 
 }
 
@@ -779,6 +805,7 @@ export interface DictionaryDoc {
   description: string;
   mappingFileId: string;
   categoryId: string;
+  order?: number;
 
 }
 
