@@ -1,6 +1,12 @@
 export interface DictionaryData {
 
-  [literal: string]: DictionaryMapping[];
+  data: {
+    [literal: string]: DictionaryMapping[];
+  };
+  meta: {
+    length: number;
+    contributors: string[];
+  };
 
 }
 
@@ -8,8 +14,8 @@ export interface DictionaryMapping {
 
   code: string;
   standard: string;
-  contributor: string;
-  [metadata: string]: string;
+  contributor: number;
+  [metadata: string]: string|number;
 
 }
 

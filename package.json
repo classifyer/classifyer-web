@@ -5,7 +5,7 @@
   "contributors": [
     "Ashkan Ashkpour <ashkan.ashkpour@chiselpowered.com>"
   ],
-  "version": "0.2.9",
+  "version": "0.2.10",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/classifyer/classifyer-web.git"

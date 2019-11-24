@@ -49,9 +49,9 @@ async function main(event: MatchMessageEvent) {
 
       let literal = (<string[]>event.data.input)[i];
 
-      if ( dictionary[literal] ) {
+      if ( dictionary.data[literal] ) {
 
-        result.push(dictionary[literal]);
+        result.push(dictionary.data[literal]);
         matchCount++;
 
       }
@@ -73,9 +73,9 @@ async function main(event: MatchMessageEvent) {
 
       const literal: string = row[event.data.targetHeader].toLowerCase().trim();
 
-      if ( dictionary[literal] ) {
+      if ( dictionary.data[literal] ) {
 
-        result.push(dictionary[literal]);
+        result.push(dictionary.data[literal]);
         matchCount++;
 
       }
@@ -189,6 +189,13 @@ async function main(event: MatchMessageEvent) {
       }
 
     }
+
+  }
+
+  // Insert contributors
+  for ( let i = 0; i < csvData.length; i++ ) {
+
+    csvData[i].contributor = dictionary.meta.contributors[+csvData[i].contributor];
 
   }
 
