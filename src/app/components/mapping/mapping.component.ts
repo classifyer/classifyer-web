@@ -9,9 +9,9 @@ import fileSaver from 'file-saver';
 import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
-  selector: 'app-application',
-  templateUrl: './application.component.html',
-  styleUrls: ['./application.component.scss'],
+  selector: 'app-mapping',
+  templateUrl: './mapping.component.html',
+  styleUrls: ['./mapping.component.scss'],
   animations: [
     trigger('fadeIn', [
       state('void', style({
@@ -29,7 +29,7 @@ import { ClipboardService } from 'ngx-clipboard';
     ])
   ]
 })
-export class ApplicationComponent implements OnInit, OnDestroy {
+export class MappingComponent implements OnInit, OnDestroy {
 
   @ViewChild('f', { static: false })
   private form: NgForm;

@@ -5,7 +5,7 @@ export * from './contribute/contribute.component';
 export * from './contribute/when-to-contribute/when-to-contribute.component';
 export * from './contribute/how-to-contribute/how-to-contribute.component';
 export * from './contribute/what-happens-after/what-happens-after.component';
-export * from './application/application.component';
+export * from './mapping/mapping.component';
 export * from './prompt/prompt.component';
 export * from './about/contact/contact.component';
 export * from './about/team/team.component';

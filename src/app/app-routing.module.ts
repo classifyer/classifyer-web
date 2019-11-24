@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {
-  ApplicationComponent,
+  MappingComponent,
   ContributeComponent,
   AboutComponent,
   TeamComponent,
@@ -15,7 +15,7 @@ import { CanCancelMatching } from '@guards/matching';
 
 
 const routes: Routes = [
-  { path: 'app', component: ApplicationComponent, canDeactivate: [CanCancelMatching] },
+  { path: 'mapping', component: MappingComponent, canDeactivate: [CanCancelMatching] },
   { path: 'contribute', component: ContributeComponent, children: [
     { path: '', pathMatch: 'full', redirectTo: 'when-to-contribute' },
     { path: 'when-to-contribute', component: WhenToContributeComponent },
@@ -27,7 +27,7 @@ const routes: Routes = [
     { path: 'team', component: TeamComponent },
     { path: 'contact', component: ContactComponent }
   ]},
-  { path: '**', redirectTo: '/app' }
+  { path: '**', redirectTo: '/mapping' }
 ];
 
 @NgModule({
