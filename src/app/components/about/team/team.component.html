@@ -38,8 +38,8 @@
     <hr>
     <p>The following contributors have greatly improved the matching results of the platform through their generous contributions to the <a href="https://github.com/classifyer/classifyer-data" target="_blank">data repository</a>:</p>
     <div class="contributors-loading" *ngIf="! contributors">
-      <lottie-animation-view *ngIf="loading" [options]="lottieConfig" width="50" height="50">
-      </lottie-animation-view>
+      <ng-lottie *ngIf="loading" [options]="lottieConfig" width="50px" height="50px">
+      </ng-lottie>
       <p *ngIf="! loading">Oops! We seem to have a problem loading the contributors list right now. Please reload the page and try again.</p>
     </div>
     <div *ngIf="contributors" [innerHTML]="contributors"></div>

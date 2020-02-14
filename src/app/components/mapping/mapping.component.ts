@@ -31,11 +31,11 @@ import { ClipboardService } from 'ngx-clipboard';
 })
 export class MappingComponent implements OnInit, OnDestroy {
 
-  @ViewChild('f', { static: false })
+  @ViewChild('f')
   private form: NgForm;
-  @ViewChild('fileController', { static: false })
+  @ViewChild('fileController')
   private fileController: ElementRef<HTMLInputElement>;
-  @ViewChild('plainLiteralsController', { static: false })
+  @ViewChild('plainLiteralsController')
   private plainLiteralsController: ElementRef<HTMLTextAreaElement>;
   private dictionarySub: Subscription;
   private matchSub: Subscription;

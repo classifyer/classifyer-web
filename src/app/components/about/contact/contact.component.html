@@ -39,8 +39,8 @@
     <textarea [disabled]="sending" name="message" ngModel placeholder="Message" required data-gramm_editor="false" maxlength="1500" minlength="20"></textarea>
     <div class="btn-group btn-group-right">
       <button [disabled]="f.invalid || sending" type="submit" class="btn btn-primary btn-icon">
-        <lottie-animation-view @fadeIn *ngIf="sending" [options]="lottieConfig" width="20" height="20">
-        </lottie-animation-view>
+        <ng-lottie @fadeIn *ngIf="sending" [options]="lottieConfig" width="20px" height="20px">
+        </ng-lottie>
         Submit
       </button>
     </div>

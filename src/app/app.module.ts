@@ -2,7 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { LottieAnimationViewModule } from 'ng-lottie';
+import { LottieModule } from 'ngx-lottie';
+import player from 'lottie-web';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -27,6 +28,12 @@ import { StrictEmailValidator } from '@validators/strictemail';
 
 import { GlobalErrorHandler } from '@services/error-handler';
 
+export function playerFactory() {
+
+  return player;
+
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,9 +56,9 @@ import { GlobalErrorHandler } from '@services/error-handler';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    LottieAnimationViewModule.forRoot(),
     BrowserAnimationsModule,
-    ClipboardModule
+    ClipboardModule,
+    LottieModule.forRoot({ player: playerFactory })
   ],
   providers: [
     { provide: ErrorHandler, useClass: GlobalErrorHandler }

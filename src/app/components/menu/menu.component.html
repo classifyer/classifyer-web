@@ -1,7 +1,7 @@
 <div class="container" [ngClass]="{ loading: loading && currentTab === 'mapping' }">
   <ng-template [ngIf]="currentTab === 'mapping'">
-    <lottie-animation-view *ngIf="loading" [options]="lottieConfig" width="50" height="50">
-    </lottie-animation-view>
+    <ng-lottie *ngIf="loading" [options]="lottieConfig" width="50px" height="50px">
+    </ng-lottie>
     <ng-template [ngIf]="! loading">
       <div class="category-container" *ngFor="let group of menuData">
         <span class="category-title">{{ group.category.name }}</span>

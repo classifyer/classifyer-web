@@ -51,8 +51,8 @@
           		l-51.45-160.536h39.787l19.526,67.894c5.479,19.046,10.479,37.386,14.299,57.397h0.709c4.048-19.298,9.045-38.352,14.526-56.693
           		l20.487-68.598h38.599L427.518,380.583z"/>
           </svg>
-          <lottie-animation-view *ngIf="dropboxDisabled" [options]="lottieConfig" width="40" height="40">
-          </lottie-animation-view>
+          <ng-lottie *ngIf="dropboxDisabled" [options]="lottieConfig" width="40px" height="40px">
+          </ng-lottie>
           <span>{{ selectedFile ? selectedFile.name : 'Drag and drop a CSV file here or click to browse' }}</span>
           <svg class="close-btn" *ngIf="selectedFile" (click)="unloadFile($event)" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 174.239 174.239">
           	<path d="M87.12,0C39.082,0,0,39.082,0,87.12s39.082,87.12,87.12,87.12s87.12-39.082,87.12-87.12S135.157,0,87.12,0z M87.12,159.305
@@ -79,35 +79,35 @@
     </ng-template>
     <!-- Matching Animations -->
     <div class="animation-container" *ngIf="state === screenStateEnum.Matching || state === screenStateEnum.Results || state === screenStateEnum.Error">
-      <lottie-animation-view
+      <ng-lottie
       *ngIf="state === screenStateEnum.Matching"
-      width="256"
-      height="256"
+      width="256px"
+      height="256px"
       [options]="lottieConfig"
       class="matching-animation"
-      (animCreated)="registerMatchingAnimation($event)">
-      </lottie-animation-view>
-      <lottie-animation-view
+      (animationCreated)="registerMatchingAnimation($event)">
+      </ng-lottie>
+      <ng-lottie
       *ngIf="state === screenStateEnum.Results && matchResult.count"
-      width="256"
-      height="256"
+      width="256px"
+      height="256px"
       [options]="lottieConfigSuccess"
       class="matching-animation">
-      </lottie-animation-view>
-      <lottie-animation-view
+      </ng-lottie>
+      <ng-lottie
       *ngIf="state === screenStateEnum.Results && ! matchResult.count"
-      width="256"
-      height="256"
+      width="256px"
+      height="256px"
       [options]="lottieConfigFail"
       class="matching-animation">
-      </lottie-animation-view>
-      <lottie-animation-view
+      </ng-lottie>
+      <ng-lottie
       *ngIf="state === screenStateEnum.Error"
-      width="256"
-      height="256"
+      width="256px"
+      height="256px"
       [options]="lottieConfigError"
       class="matching-animation">
-      </lottie-animation-view>
+      </ng-lottie>
     </div>
     <!-- Matching -->
     <ng-template [ngIf]="state === screenStateEnum.Matching">

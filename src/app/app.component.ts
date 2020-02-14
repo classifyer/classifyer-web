@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   public headers: string[] = [];
   public menuOpened: boolean = true;
 
-  @ViewChild(PromptComponent, { static: false })
+  @ViewChild(PromptComponent)
   private prompt: PromptComponent;
 
   @HostListener('window:resize', ['$event'])
