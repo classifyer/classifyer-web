@@ -108,6 +108,14 @@ export class MenuComponent implements OnInit {
 
   }
 
+  public getShortDictionaryLength(length: number): string {
+
+    if ( length < 1000 ) return length + '';
+    if ( length < 1000000 ) return `${parseFloat((length / 1000).toFixed(1))}K`;
+    return `${parseFloat((length / 1000000).toFixed(1))}M`;
+
+  }
+
 }
 
 export interface GroupedDictionaries {

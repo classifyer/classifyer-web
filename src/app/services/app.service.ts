@@ -100,7 +100,8 @@ export class AppService {
               description: doc.get('description'),
               mappingFileId: doc.get('mappingFileId'),
               categoryId: doc.get('categoryId'),
-              order: doc.get('order') || 0
+              order: doc.get('order') || 0,
+              length: doc.get('length')
             };
 
           })
@@ -806,6 +807,7 @@ export interface DictionaryDoc {
   mappingFileId: string;
   categoryId: string;
   order?: number;
+  length: number;
 
 }
 

@@ -10,6 +10,7 @@
         [ngClass]="{ active: activeDictionary === dictionary.id, enabled: enabled }"
         (click)="activateDictionary(dictionary.id, $event)">
           <span class="classification-name">{{ dictionary.name }}</span>
+          <span class="classification-length">{{ getShortDictionaryLength(dictionary.length) }}</span>
           <span class="classification-lang">{{ dictionary.language }}</span>
         </span>
       </div>

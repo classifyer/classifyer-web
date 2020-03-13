@@ -126,6 +126,16 @@
         padding: rem(3px) rem(8px);
         margin-left: rem(10px);
       }
+      .classification-length {
+        font-size: rem(12px);
+        font-weight: bold;
+        background-color: transparent;
+        color: map-get($palette, color-gray-lightest);
+        border-radius: rem(20px);
+        padding: rem(3px) rem(8px);
+        margin-left: rem(10px);
+        border: rem(2px) solid map-get($palette, color-gray-lightest);
+      }
     }
     .menu-item {
       @extend .classification, .enabled;
