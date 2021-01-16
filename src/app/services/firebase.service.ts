@@ -15,6 +15,7 @@ export class FirebaseService {
   private authenticated: boolean = false;
   /** Emits when there's a change in authentication (the boolean value indicates if the user is authenticated or not). */
   public onAuthChange: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.authenticated);
+  public currentToken: string = null;
 
   constructor() {
 
@@ -28,11 +29,27 @@ export class FirebaseService {
 
       this.onAuthChange.next(this.authenticated);
 
-      if ( user ) return;
-
       // Authenticate anonymously
-      firebase.auth().signInAnonymously()
-      .catch(console.error);
+      if ( ! user ) {
+
+        this.currentToken = null;
+
+        firebase.auth().signInAnonymously()
+        .catch(console.error);
+
+      }
+      // Set token
+      else {
+
+        user.getIdToken()
+        .then(token => {
+
+          this.currentToken = token;
+
+        })
+        .catch(console.error);
+
+      }
 
     });
 

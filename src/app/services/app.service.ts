@@ -597,7 +597,10 @@ export class AppService {
         message: message.trim(),
         time: Date.now()
       }, {
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${this.firebase.currentToken}`
+        }
       }).toPromise();
 
       if ( response.error ) {
