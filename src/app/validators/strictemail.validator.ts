@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 import { NG_VALIDATORS, Validator, AbstractControl } from '@angular/forms';
-import { isEmail } from 'validator';
+import isEmail from 'validator/es/lib/isEmail';
 
 @Directive({
   selector: '[strictemail]',

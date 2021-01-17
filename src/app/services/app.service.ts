@@ -648,7 +648,7 @@ export class AppService {
 
 export class AnalyticsLogger {
 
-  private userAgent: IUAParser.IResult = null;
+  private userAgent: UAParser.IResult = null;
 
   constructor(
     userAgent: string,
